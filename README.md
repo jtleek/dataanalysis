@@ -34,7 +34,7 @@ lecture directory.
 
 Once you have completed this step run the commands:
 
-```
+```r
 slidify("index.Rmd")
 browseURL("index.html")
 ```
