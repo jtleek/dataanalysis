@@ -13,6 +13,8 @@ You will need to install [R](http://cran.rstudio.com/), [Rstudio](http://www.rst
 
 install.packages("devtools")
 
+library("devtools")
+
 install_github("slidify","ramnathv")
 
 install_github("slidifyLibraries","ramnathv")
