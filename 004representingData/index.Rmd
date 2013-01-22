@@ -247,7 +247,7 @@ plot(xvals,dnorm(xvals,5,1),type="l",col="blue",lwd=3,ylab="density",xlab="Y val
 
 ```{r, echo=FALSE, fig.height = 4, fig.width = 4}
 xvals = seq(-10,10,length=100)
-plot(xvals,dnorm(xvals,1,2),type="l",col="blue",lwd=3,ylab="density",xlab="X value")
+plot(xvals,dnorm(xvals,0,2),type="l",col="blue",lwd=3,ylab="density",xlab="X value")
 
 ```
 

@@ -323,7 +323,7 @@ myDataFrame$firstNames
 ## Logical subsetting
 
 ```r
-myDataFrame[firstNames == "jeff", ]
+myDataFrame[myDataFrame$firstNames == "jeff", ]
 ```
 
 ```
