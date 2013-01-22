@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Simulation basics</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Simulation basics">
+  <meta name="author" content="Jeffrey Leek, Assistant Professor of Biostatistics">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/zenburn.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+    <link rel="stylesheet" href = "assets/css/custom.css">
+<link rel="stylesheet" href = "assets/css/ribbons.css">
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+    <!-- END LOGO SLIDE -->
+    
+
+    <!-- TITLE SLIDE -->
+    <!-- Should I move this to a Local Layout File? -->
+    <slide class="title-slide segue nobackground">
+      <hgroup class="auto-fadein">
+        <h1>Simulation basics</h1>
+        <h2></h2>
+        <p>Jeffrey Leek, Assistant Professor of Biostatistics<br/>Johns Hopkins Bloomberg School of Public Health</p>
+      </hgroup>
+          </slide>
+
+    <!-- SLIDES -->
+      <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h2>Important simulation functions</h2>
+  </hgroup>
+  <article>
+    <p><strong>Distributions</strong></p>
+
+<ul>
+<li>rbeta, rbinom, rcauchy, rchisq, rexp, rf, rgamma, rgeom, rhyper, rlogis, rlnorm, rnbinom, rnorm, rpois, rt, runif, rweibull</li>
+</ul>
+
+<p><strong>Densities</strong></p>
+
+<ul>
+<li>dbeta,dbinom, dcauchy, dchisq, dexp, df, dgamma, dgeom, dhyper, dlogis, dlnorm, dnbinom, dnorm, dpois, dt, dunif, dweibull</li>
+</ul>
+
+<p><strong>Sampling</strong></p>
+
+<ul>
+<li>sample(,replace=TRUE),sample(replace=FALSE)</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-2" style="background:;">
+  <hgroup>
+    <h2>r<em>foo</em> functions generate data</h2>
+  </hgroup>
+  <article>
+    <p><strong>Normal</strong></p>
+
+<pre><code class="r">args(rnorm)
+</code></pre>
+
+<pre><code>function (n, mean = 0, sd = 1) 
+NULL
+</code></pre>
+
+<pre><code class="r">heights = rnorm(10,mean=188,sd=3)
+heights
+</code></pre>
+
+<pre><code> [1] 186.0 191.2 187.6 187.9 186.6 187.2 187.2 189.5 190.8 186.4
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h2>r<em>foo</em> functions generate data</h2>
+  </hgroup>
+  <article>
+    <p><strong>Binomial</strong></p>
+
+<pre><code class="r">args(rbinom)
+</code></pre>
+
+<pre><code>function (n, size, prob) 
+NULL
+</code></pre>
+
+<pre><code class="r">coinFlips = rbinom(10,size=10,prob=0.5)
+coinFlips
+</code></pre>
+
+<pre><code> [1] 3 4 6 5 7 6 5 8 5 6
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>Example distribution: Normal</h2>
+  </hgroup>
+  <article>
+    <p><strong>Normal Distribution: \(N(\mu,\sigma)\)</strong></p>
+
+<ul>
+<li>\(X \sim N(0,1)\)</li>
+</ul>
+
+<div class="rimage center"><img src="fig/unnamed-chunk-3.png"  class="plot" /></div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-5" style="background:;">
+  <hgroup>
+    <h2>d<em>foo</em> functions calculate the density</h2>
+  </hgroup>
+  <article>
+    <p><strong>Normal</strong></p>
+
+<pre><code class="r">args(dnorm)
+</code></pre>
+
+<pre><code>function (x, mean = 0, sd = 1, log = FALSE) 
+NULL
+</code></pre>
+
+<pre><code class="r">x = seq(from=-5,to=5,length=10)
+normalDensity = dnorm(x,mean=0,sd=1)
+round(normalDensity,2)
+</code></pre>
+
+<pre><code> [1] 0.00 0.00 0.01 0.10 0.34 0.34 0.10 0.01 0.00 0.00
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-6" style="background:;">
+  <hgroup>
+    <h2>Example distribution: Binomial</h2>
+  </hgroup>
+  <article>
+    <p><strong>Binomial distribution: \(Bin(n,p)\)</strong></p>
+
+<ul>
+<li>\(X \sim Bin(10,0.5)\)
+<div class="rimage center"><img src="fig/unnamed-chunk-5.png"  class="plot" /></div></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-7" style="background:;">
+  <hgroup>
+    <h2>d<em>foo</em> functions calculate the density</h2>
+  </hgroup>
+  <article>
+    <p><strong>Binomial</strong></p>
+
+<pre><code class="r">args(dbinom)
+</code></pre>
+
+<pre><code>function (x, size, prob, log = FALSE) 
+NULL
+</code></pre>
+
+<pre><code class="r">x = seq(0,10,by=1)
+binomialDensity = dbinom(x,size=10,prob=0.5)
+round(binomialDensity,2)
+</code></pre>
+
+<pre><code> [1] 0.00 0.01 0.04 0.12 0.21 0.25 0.21 0.12 0.04 0.01 0.00
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-8" style="background:;">
+  <hgroup>
+    <h2>Sample draws a random sample</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">args(sample)
+</code></pre>
+
+<pre><code>function (x, size, replace = FALSE, prob = NULL) 
+NULL
+</code></pre>
+
+<pre><code class="r">heights = rnorm(10,mean=188,sd=3)
+heights
+</code></pre>
+
+<pre><code> [1] 187.2 185.4 187.9 187.3 184.8 190.3 185.0 188.2 190.0 188.1
+</code></pre>
+
+<pre><code class="r">sample(heights,size=10,replace=TRUE)
+</code></pre>
+
+<pre><code> [1] 188.2 188.2 184.8 185.0 187.2 188.2 187.9 185.4 184.8 185.4
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-9" style="background:;">
+  <hgroup>
+    <h2>Sample draws a random sample</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">heights
+</code></pre>
+
+<pre><code> [1] 187.2 185.4 187.9 187.3 184.8 190.3 185.0 188.2 190.0 188.1
+</code></pre>
+
+<pre><code class="r">sample(heights,size=10,replace=FALSE)
+</code></pre>
+
+<pre><code> [1] 185.0 188.2 188.1 184.8 190.3 187.9 187.2 185.4 190.0 187.3
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-10" style="background:;">
+  <hgroup>
+    <h2>Sample can draw according to a set of probabilities</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">heights
+</code></pre>
+
+<pre><code> [1] 187.2 185.4 187.9 187.3 184.8 190.3 185.0 188.2 190.0 188.1
+</code></pre>
+
+<pre><code class="r">probs = c(0.4,0.3,0.2,0.1,0,0,0,0,0,0)
+sum(probs)
+</code></pre>
+
+<pre><code>[1] 1
+</code></pre>
+
+<pre><code class="r">sample(heights,size=10,replace=TRUE,prob=probs)
+</code></pre>
+
+<pre><code> [1] 187.2 185.4 187.9 187.3 185.4 187.2 185.4 187.2 187.2 185.4
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-11" style="background:;">
+  <hgroup>
+    <h2>Setting a seed</h2>
+  </hgroup>
+  <article>
+    <p>Setting a seed ensures reproducible results from random processes in R</p>
+
+<pre><code class="r">set.seed(12345)
+rnorm(5,mean=0,sd=1)
+</code></pre>
+
+<pre><code>[1]  0.5855  0.7095 -0.1093 -0.4535  0.6059
+</code></pre>
+
+<pre><code class="r">
+set.seed(12345)
+rnorm(5,mean=0,sd=1)
+</code></pre>
+
+<pre><code>[1]  0.5855  0.7095 -0.1093 -0.4535  0.6059
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-12" style="background:;">
+  <hgroup>
+    <h2>For more information</h2>
+  </hgroup>
+  <article>
+    <p><strong>More on distributions in R</strong></p>
+
+<p><a href="http://cran.r-project.org/web/views/Distributions.html">http://cran.r-project.org/web/views/Distributions.html</a></p>
+
+<p><strong>Computing for Data Analysis</strong></p>
+
+<p><a href="http://www.youtube.com/watch?v=tvv4IA8PEzw&amp;list=PLjTlxb-wKvXOzI2h0F2_rYZHIXz8GWBop&amp;index=6">Simulation in R</a></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+
+  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+<!-- Grab CDN jQuery, fall back to local if offline -->
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+<script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery-1.7.min.js"><\/script>')</script>
+<!-- Load Javascripts for Widgets -->
+<!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script> -->
+<script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
+<!-- LOAD HIGHLIGHTER JS FILES -->
+<script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<!-- DONE LOADING HIGHLIGHTER JS FILES -->
+</html>

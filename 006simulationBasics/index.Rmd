@@ -1,0 +1,166 @@
+---
+title       : Simulation basics
+subtitle    : 
+author      : Jeffrey Leek, Assistant Professor of Biostatistics 
+job         : Johns Hopkins Bloomberg School of Public Health
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : zenburn   # 
+widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+---
+```{r setup, cache = F, echo = F, message = F, warning = F, tidy = F}
+# make this an external chunk that can be included in any file
+options(width = 70)
+opts_chunk$set(message = F, error = F, warning = F, comment = NA, fig.align = 'center', dpi = 100, tidy = F, cache = T, cache.path = '.cache/', fig.path = 'fig/')
+
+options(xtable.type = 'html')
+knit_hooks$set(inline = function(x) {
+  if(is.numeric(x)) {
+    round(x, getOption('digits'))
+  } else {
+    paste(as.character(x), collapse = ', ')
+  }
+})
+knit_hooks$set(plot = knitr:::hook_plot_html)
+```
+
+## Important simulation functions
+
+__Distributions__
+* rbeta, rbinom, rcauchy, rchisq, rexp, rf, rgamma, rgeom, rhyper, rlogis, rlnorm, rnbinom, rnorm, rpois, rt, runif, rweibull
+
+__Densities__
+
+* dbeta,dbinom, dcauchy, dchisq, dexp, df, dgamma, dgeom, dhyper, dlogis, dlnorm, dnbinom, dnorm, dpois, dt, dunif, dweibull
+
+__Sampling__
+* sample(,replace=TRUE),sample(replace=FALSE)
+
+
+---
+
+## r_foo_ functions generate data 
+
+__Normal__
+```{r}
+args(rnorm)
+heights = rnorm(10,mean=188,sd=3)
+heights
+```
+
+---
+
+## r_foo_ functions generate data
+
+__Binomial__
+```{r}
+args(rbinom)
+coinFlips = rbinom(10,size=10,prob=0.5)
+coinFlips
+```
+
+
+---
+
+## Example distribution: Normal
+
+__Normal Distribution: $N(\mu,\sigma)$__
+* $X \sim N(0,1)$
+
+```{r, echo=FALSE, fig.height = 4, fig.width = 4}
+xvals = seq(-10,10,length=100)
+plot(xvals,dnorm(xvals,0,1),type="l",col="blue",lwd=3,ylab="density",xlab="X value")
+
+```
+
+---
+
+## d_foo_ functions calculate the density
+__Normal__
+```{r}
+args(dnorm)
+x = seq(from=-5,to=5,length=10)
+normalDensity = dnorm(x,mean=0,sd=1)
+round(normalDensity,2)
+
+```
+
+---
+
+
+## Example distribution: Binomial
+
+__Binomial distribution: $Bin(n,p)$__
+* $X \sim Bin(10,0.5)$
+```{r, echo=FALSE, fig.height = 4, fig.width = 4}
+xvals = 0:10
+plot(xvals,dbinom(xvals,10,0.5),type="h",col="blue",lwd=3,ylab="probability",xlab="X value")
+
+```
+
+---
+## d_foo_ functions calculate the density
+__Binomial__
+```{r}
+args(dbinom)
+x = seq(0,10,by=1)
+binomialDensity = dbinom(x,size=10,prob=0.5)
+round(binomialDensity,2)
+```
+
+---
+## Sample draws a random sample
+```{r}
+args(sample)
+heights = rnorm(10,mean=188,sd=3)
+heights
+sample(heights,size=10,replace=TRUE)
+
+```
+
+---
+
+## Sample draws a random sample
+
+```{r}
+heights
+sample(heights,size=10,replace=FALSE)
+
+```
+
+---
+
+## Sample can draw according to a set of probabilities
+```{r}
+heights
+probs = c(0.4,0.3,0.2,0.1,0,0,0,0,0,0)
+sum(probs)
+sample(heights,size=10,replace=TRUE,prob=probs)
+
+```
+---
+
+## Setting a seed
+
+Setting a seed ensures reproducible results from random processes in R
+```{r}
+set.seed(12345)
+rnorm(5,mean=0,sd=1)
+
+set.seed(12345)
+rnorm(5,mean=0,sd=1)
+```
+
+
+---
+
+## For more information
+
+__More on distributions in R__
+
+[http://cran.r-project.org/web/views/Distributions.html](http://cran.r-project.org/web/views/Distributions.html)
+
+__Computing for Data Analysis__
+
+[Simulation in R](http://www.youtube.com/watch?v=tvv4IA8PEzw&list=PLjTlxb-wKvXOzI2h0F2_rYZHIXz8GWBop&index=6)
