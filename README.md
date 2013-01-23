@@ -21,14 +21,7 @@ install_github("slidifyLibraries","ramnathv")
 
 ## Setting your working directory
 
-Next, you need to set your working directory to the lecture you would like to compile. 
-
-```r
-setwd(file.choose())
-```
-
-and select the directory of the lecture you would like to compile. This will set your working directory to the 
-lecture directory. 
+Next, you need to set your working directory to the lecture you would like to compile. You can do this with either the drop down menus or using the setwd() command in R. Pick the directory for the lecture you would like to compile.
 
 
 ## Compiling the slides
