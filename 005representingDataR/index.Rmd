@@ -176,7 +176,7 @@ myDataFrame$firstNames
 ## Logical subsetting
 ```{r}
 myDataFrame[myDataFrame$firstNames=="jeff",]
-myDataFrame[heights < 190,]
+myDataFrame[myDataFrame$heights < 190,]
 ```
 
 ---
