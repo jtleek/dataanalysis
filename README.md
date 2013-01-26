@@ -29,6 +29,7 @@ Next, you need to set your working directory to the lecture you would like to co
 Once you have completed this step run the commands:
 
 ```r
+library(slidify)
 slidify("index.Rmd")
 browseURL("index.html")
 ```
