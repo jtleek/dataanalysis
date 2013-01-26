@@ -13,7 +13,7 @@ mode        : selfcontained # {standalone, draft}
 ## Definition of data
 <q>Data are values of qualitative or quantitative variables, belonging to a set of items.</q>
 
-[http://en.wikipedia.org/wiki/Data](http://en.wikipedia.org/wiki/Data)
+[http://en.wikipedia.org/wiki/Data]()
 
 
 ---
@@ -21,7 +21,7 @@ mode        : selfcontained # {standalone, draft}
 ## Definition of data
 <q>Data are values of qualitative or quantitative variables, belonging to a <redtext>set of items</redtext>.</q>
 
-[http://en.wikipedia.org/wiki/Data](http://en.wikipedia.org/wiki/Data)
+[http://en.wikipedia.org/wiki/Data]()
 
 __Set of items__: Sometimes called the population; the set of objects you are interested in
 
@@ -32,7 +32,7 @@ __Set of items__: Sometimes called the population; the set of objects you are in
 ## Definition of data
 <q>Data are values of qualitative or quantitative <redtext>variables</redtext>, belonging to a set of items.</q>
 
-[http://en.wikipedia.org/wiki/Data](http://en.wikipedia.org/wiki/Data)
+[http://en.wikipedia.org/wiki/Data]()
 
 __Variables__: A measurement or characteristic of an item.
 
@@ -42,7 +42,7 @@ __Variables__: A measurement or characteristic of an item.
 ## Definition of data
 <q>Data are values of <redtext>qualitative</redtext> or <redtext>quantitative</redtext> variables, belonging to a set of items.</q>
 
-[http://en.wikipedia.org/wiki/Data](http://en.wikipedia.org/wiki/Data)
+[http://en.wikipedia.org/wiki/Data]()
 
 
 __Qualitative__: Country of origin, sex, treatment
@@ -59,7 +59,7 @@ __Raw data__
 * Data analysis _includes_ processing
 * Raw data may only need to be processed once
 
-[http://en.wikipedia.org/wiki/Raw_data](http://en.wikipedia.org/wiki/Raw_data)
+[http://en.wikipedia.org/wiki/Raw_data]()
 
 __Processed data__
 * Data that is ready for analysis
@@ -67,7 +67,7 @@ __Processed data__
 * There may be standards for processing
 * All steps should be recorded 
 
-[http://en.wikipedia.org/wiki/Computer_data_processing](http://en.wikipedia.org/wiki/Computer_data_processing)
+[http://en.wikipedia.org/wiki/Computer_data_processing]()
 
 ---
 
@@ -75,7 +75,7 @@ __Processed data__
 
 <img class=center src=assets/img/hiseq.jpg height='80%'/>
 
-[http://www.illumina.com.cn/support/sequencing/sequencing_instruments/hiseq_1000.asp](http://www.illumina.com.cn/support/sequencing/sequencing_instruments/hiseq_1000.asp)
+[http://www.illumina.com.cn/support/sequencing/sequencing_instruments/hiseq_1000.asp]()
 
 ---
 
@@ -83,7 +83,7 @@ __Processed data__
 
 <img class=center src=assets/img/processing.png height='80%'/>
 
-[http://www.cbcb.umd.edu/~hcorrada/CMSC858B/lectures/lect22_seqIntro/seqIntro.pdf](http://www.cbcb.umd.edu/~hcorrada/CMSC858B/lectures/lect22_seqIntro/seqIntro.pdf)
+[http://www.cbcb.umd.edu/~hcorrada/CMSC858B/lectures/lect22_seqIntro/seqIntro.pdf]()
 
 ---
 
@@ -93,7 +93,7 @@ __Processed data__
 <img class=center src=assets/img/fastq.png height='80%'/>
 
 
-[http://brianknaus.com/software/srtoolbox/s_4_1_sequence80.txt](http://brianknaus.com/software/srtoolbox/s_4_1_sequence80.txt)
+[http://brianknaus.com/software/srtoolbox/s_4_1_sequence80.txt]()
 
 ---
 
@@ -101,7 +101,7 @@ __Processed data__
 
 <img class=center src=assets/img/twitter.png height='80%'/>
 
-[https://dev.twitter.com/docs/api/1/get/blocks/blocking](https://dev.twitter.com/docs/api/1/get/blocks/blocking)
+[https://dev.twitter.com/docs/api/1/get/blocks/blocking]()
 
 ---
 
@@ -109,7 +109,7 @@ __Processed data__
 
 <img class=center src=assets/img/medicalrecord.png height='60%'/>
 
-[http://blue-button.github.com/challenge/](http://blue-button.github.com/challenge/)
+[http://blue-button.github.com/challenge/]()
 
 ---
 
@@ -122,7 +122,7 @@ __Processed data__
 3. Each table/file stores data about one kind of observation (e.g. people/hospitals).
 
 
-[http://vita.had.co.nz/papers/tidy-data.pdf](http://vita.had.co.nz/papers/tidy-data.pdf)
+[http://vita.had.co.nz/papers/tidy-data.pdf]()
 
 [Leek, Taub, and Pineda 2011 PLoS One](http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0026895)
 
@@ -132,7 +132,7 @@ __Processed data__
 
 <img class=center src=assets/img/howmuch.png height='80%'/>
 
-[http://mashable.com/2011/06/28/data-infographic/](http://mashable.com/2011/06/28/data-infographic/)
+[http://mashable.com/2011/06/28/data-infographic/]()
 
 ---
 
