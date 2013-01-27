@@ -1,0 +1,327 @@
+---
+title       : Data munging basics
+subtitle    : 
+author      : Jeffrey Leek, Assistant Professor of Biostatistics 
+job         : Johns Hopkins Bloomberg School of Public Health
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : zenburn   # 
+widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+---
+
+```{r setup, cache = F, echo = F, message = F, warning = F, tidy = F}
+# make this an external chunk that can be included in any file
+options(width = 70)
+opts_chunk$set(message = F, warning = F, comment = NA, fig.align = 'center', dpi = 100, tidy = F, cache = T, cache.path = '.cache/', fig.path = 'fig/')
+
+options(xtable.type = 'html')
+knit_hooks$set(inline = function(x) {
+  if(is.numeric(x)) {
+    round(x, getOption('digits'))
+  } else {
+    paste(as.character(x), collapse = ', ')
+  }
+})
+knit_hooks$set(plot = knitr:::hook_plot_html)
+```
+
+
+## Recall Tidy Data
+
+<img class=center src=assets/img/excel.png height='50%'/>
+
+1. Each variable forms a column
+2. Each observation forms a row
+3. Each table/file stores data about one kind of observation (e.g. people/hospitals).
+
+
+[http://vita.had.co.nz/papers/tidy-data.pdf](http://vita.had.co.nz/papers/tidy-data.pdf)
+
+[Leek, Taub, and Pineda 2011 PLoS One](http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0026895)
+
+---
+
+## Where we would like to be
+
+* [Tidy data]([http://vita.had.co.nz/papers/tidy-data.pdf](http://vita.had.co.nz/papers/tidy-data.pdf) refers to the shape of the data
+  * Variables in columns
+  * Observations in rows
+  * Tables holding elements of only one kind
+* Plus
+  * Column names are easy to use and informative
+  * Row names are easy to use and informative
+  * Obvious mistakes in the data have been removed
+  * Variable values are internally consistent
+  * Appropriate transformed variables have been added
+
+
+---
+
+## A partial list of munging operations
+
+* Fix variable names
+* Create new variables 
+* Merge data sets
+* Reshape data sets
+* Deal with missing data 
+* Take transforms of variables
+* Check on and remove inconsistent values
+
+__These steps must be recorded__
+
+__90% of your effort will often be spent here__
+
+---
+
+## A partial list of munging operations
+
+* <redtext> Fix variable names </redtext>
+* <redtext> Create new variables </redtext>
+* <redtext> Merge data sets</redtext>
+* <redtext> Reshape data sets</redtext>
+* Deal with missing data 
+* Take transforms of variables
+* Check on and remove inconsistent values
+
+
+---
+
+## Fixing character vectors - tolower(), toupper()
+
+```{r cachedChunk,echo=FALSE}
+fileUrl <- "https://data.baltimorecity.gov/api/views/dz54-2aru/rows.csv?accessType=DOWNLOAD"
+download.file(fileUrl,destfile="./data/cameras.csv",method="curl")
+```
+
+```{r,dependson="cachedChunk"}
+cameraData <- read.csv("./data/cameras.csv")
+names(cameraData)
+tolower(names(cameraData))
+```
+
+
+---
+
+## Fixing character vectors - strsplit()
+
+* Good for automatically splitting variable names
+* Important parameters: _x_, _split_
+
+```{r splitNames,dependson="cachedChunk"}
+splitNames = strsplit(names(cameraData),"\\.")
+splitNames[[5]]
+splitNames[[6]]
+```
+---
+
+## Fixing character vectors - sapply()
+
+* Applies a function to each element in a vector or list
+* Important parameters: _X_,_FUN_
+
+```{r,dependson="splitNames"}
+splitNames[[6]][1]
+firstElement <- function(x){x[1]}
+sapply(splitNames,firstElement)
+```
+
+---
+
+## Peer review experiment data
+
+* Data on submissions/reviews in an experiment 
+
+<img class=center src=assets/img/cooperation.png height='60%'/>
+
+[http://www.plosone.org/article/info:doi/10.1371/journal.pone.0026895](http://www.plosone.org/article/info:doi/10.1371/journal.pone.0026895)
+
+
+---
+
+## Peer review data
+
+
+```{r reviewDownload, cache=TRUE}
+fileUrl1 <- "https://dl.dropbox.com/u/7710864/data/reviews-apr29.csv"
+fileUrl2 <- "https://dl.dropbox.com/u/7710864/data/solutions-apr29.csv"
+download.file(fileUrl1,destfile="./data/reviews.csv",method="curl")
+download.file(fileUrl2,destfile="./data/solutions.csv",method="curl")
+reviews <- read.csv("./data/reviews.csv"); solutions <- read.csv("./data/solutions.csv")
+head(reviews,2)
+head(solutions,2)
+```
+
+---
+
+## Fixing character vectors - sub(),gsub()
+
+* Important parameters: _pattern_, _replacement_, _x_
+
+```{r, dependson="reviewDownload"}
+names(reviews)
+sub("_","",names(reviews),)
+
+```
+
+---
+
+## Fixing character vectors - sub(),gsub()
+
+```{r, dependson="reviewDownload"}
+testName <- "this_is_a_test"
+sub("_","",testName)
+gsub("_","",testName)
+```
+
+
+---
+
+## Quantitative variables in ranges -  - cut()
+
+* Important parameters: _x_,_breaks_
+
+```{r, dependson="reviewDownload"}
+reviews$time_left[1:10]
+timeRanges <- cut(reviews$time_left,seq(0,3600,by=600))
+timeRanges[1:10]
+```
+
+---
+
+## Quantitative variables in ranges -  - cut()
+
+```{r, dependson="reviewDownload"}
+class(timeRanges)
+table(timeRanges,useNA="ifany")
+```
+
+---
+
+## Quantitative variables in ranges - cut2() {Hmisc}
+
+```{r, dependson="reviewDownload"}
+library(Hmisc)
+timeRanges<- cut2(reviews$time_left,g=6)
+table(timeRanges,useNA="ifany")
+```
+
+
+---
+
+## Adding an extra variable 
+
+```{r, dependson="reviewDownload"}
+timeRanges<- cut2(reviews$time_left,g=6)
+reviews$timeRanges <- timeRanges
+head(reviews,2)
+```
+
+---
+
+## Merging data - merge()
+
+* Merges data frames
+* Important parameters: _x_,_y_,_by_,_by.x_,_by.y_,_all_
+```{r, dependson="reviewDownload"}
+names(reviews)
+names(solutions)
+```
+
+---
+
+## Merging data - merge()
+
+```{r, dependson="reviewDownload"}
+mergedData <- merge(reviews,solutions,all=TRUE)
+head(mergedData)
+```
+
+---
+
+## Merging data - merge()
+
+```{r mergedData, dependson="reviewDownload"}
+mergedData2 <- merge(reviews,solutions,by.x="solution_id",by.y="id",all=TRUE)
+head(mergedData2[,1:6],3)
+reviews[1,1:6]
+```
+
+
+---
+
+## Sorting values - sort()
+
+* Important parameters: _x_, _decreasing_
+
+```{r, dependson="mergedData"}
+mergedData2$reviewer_id[1:10]
+sort(mergedData2$reviewer_id)[1:10]
+```
+
+---
+
+## Ordering values - order()
+
+* Important parameters: _list of variables to order_, _na.last_,_decreasing_
+
+```{r, dependson="mergedData"}
+mergedData2$reviewer_id[1:10]
+order(mergedData2$reviewer_id)[1:10]
+mergedData2$reviewer_id[order(mergedData2$reviewer_id)]
+```
+
+---
+
+## Reordering a data frame
+
+```{r, dependson="mergedData"}
+head(mergedData2[,1:6],3)
+sortedData <- mergedData2[order(mergedData2$reviewer_id),]
+head(sortedData[,1:6],3)
+```
+
+---
+
+## Reordering by multiple variables
+
+```{r, dependson="mergedData"}
+head(mergedData2[,1:6],3)
+sortedData <- mergedData2[order(mergedData2$reviewer_id,mergedData2$id),]
+head(sortedData[,1:6],3)
+```
+
+
+---
+
+## Reshaping data - example
+
+```{r hadleyExample,cache=TRUE}
+misShaped <- as.data.frame(matrix(c(NA,5,1,4,2,3),byrow=TRUE,nrow=3))
+names(misShaped) <- c("treatmentA","treatmentB")
+misShaped$people <- c("John","Jane","Mary")
+misShaped
+```
+
+[http://vita.had.co.nz/papers/tidy-data.pdf](http://vita.had.co.nz/papers/tidy-data.pdf)
+
+
+---
+
+## Reshaping data - melt() {reshape2}
+
+* Important parameters: _id.vars_, _measure.vars_, _variable.name_
+
+```{r,dependson="hadleyExample"}
+melt(misShaped,id.vars="people",variable.name="treatment",value.name="value")
+```
+
+
+---
+
+## More resources
+
+* [Tidy data and tidy tools](http://vita.had.co.nz/papers/tidy-data-pres.pdf)
+* Andrew Jaffe's [Data Cleaning Lecture](https://dl.dropbox.com/u/7710864/courseraPublic/otherResources/lecture3/index.html)
+* Hadley Wickham on [regular expressions](https://dl.dropbox.com/u/7710864/courseraPublic/otherResources/14-reg-exp.pdf)
+* Long, painful experience :-) 

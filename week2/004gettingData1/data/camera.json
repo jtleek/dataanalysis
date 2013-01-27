@@ -1,0 +1,745 @@
+{
+  "meta" : {
+    "view" : {
+      "id" : "dz54-2aru",
+      "name" : "Baltimore Fixed Speed Cameras",
+      "attribution" : "Department of Transportation",
+      "attributionLink" : "http://www.baltimorecity.gov/Government/AgenciesDepartments/Transportation/SpeedMonitoringLocations.aspx",
+      "averageRating" : 0,
+      "category" : "Transportation",
+      "createdAt" : 1334171223,
+      "description" : "Motorists who drive aggressively and exceed the posted speed limit by at least 12 miles per hour will receive $40 citations in the mail. These citations are not reported to insurance companies and no license points are assigned. Notification signs will be placed at all speed enforcement locations so that motorists will be aware that they are approaching a speed check zone. The goal of the program is to make the streets of Baltimore safer for everyone by changing aggressive driving behavior. In addition to the eight portable speed enforcement units, the city has retrofitted 50 red light camera locations with the automated speed enforcement technology.",
+      "displayType" : "map",
+      "downloadCount" : 205,
+      "licenseId" : "CC_30_BY",
+      "numberOfComments" : 1,
+      "oid" : 591522,
+      "publicationAppendEnabled" : false,
+      "publicationDate" : 1331299017,
+      "publicationGroup" : 294502,
+      "publicationStage" : "published",
+      "rowClass" : "",
+      "rowsUpdatedAt" : 1331298888,
+      "rowsUpdatedBy" : "n22b-663u",
+      "signed" : false,
+      "tableId" : 294502,
+      "totalTimesRated" : 0,
+      "viewCount" : 12341,
+      "viewLastModified" : 1359122185,
+      "viewType" : "tabular",
+      "columns" : [ {
+        "id" : -1,
+        "name" : "sid",
+        "dataTypeName" : "meta_data",
+        "fieldName" : ":sid",
+        "position" : 0,
+        "renderTypeName" : "meta_data",
+        "format" : {
+        }
+      }, {
+        "id" : -1,
+        "name" : "id",
+        "dataTypeName" : "meta_data",
+        "fieldName" : ":id",
+        "position" : 0,
+        "renderTypeName" : "meta_data",
+        "format" : {
+        }
+      }, {
+        "id" : -1,
+        "name" : "position",
+        "dataTypeName" : "meta_data",
+        "fieldName" : ":position",
+        "position" : 0,
+        "renderTypeName" : "meta_data",
+        "format" : {
+        }
+      }, {
+        "id" : -1,
+        "name" : "created_at",
+        "dataTypeName" : "meta_data",
+        "fieldName" : ":created_at",
+        "position" : 0,
+        "renderTypeName" : "meta_data",
+        "format" : {
+        }
+      }, {
+        "id" : -1,
+        "name" : "created_meta",
+        "dataTypeName" : "meta_data",
+        "fieldName" : ":created_meta",
+        "position" : 0,
+        "renderTypeName" : "meta_data",
+        "format" : {
+        }
+      }, {
+        "id" : -1,
+        "name" : "updated_at",
+        "dataTypeName" : "meta_data",
+        "fieldName" : ":updated_at",
+        "position" : 0,
+        "renderTypeName" : "meta_data",
+        "format" : {
+        }
+      }, {
+        "id" : -1,
+        "name" : "updated_meta",
+        "dataTypeName" : "meta_data",
+        "fieldName" : ":updated_meta",
+        "position" : 0,
+        "renderTypeName" : "meta_data",
+        "format" : {
+        }
+      }, {
+        "id" : -1,
+        "name" : "meta",
+        "dataTypeName" : "meta_data",
+        "fieldName" : ":meta",
+        "position" : 0,
+        "renderTypeName" : "meta_data",
+        "format" : {
+        }
+      }, {
+        "id" : 7666271,
+        "name" : "address",
+        "dataTypeName" : "text",
+        "fieldName" : "address",
+        "position" : 1,
+        "renderTypeName" : "text",
+        "tableColumnId" : 2224361,
+        "width" : 338,
+        "cachedContents" : {
+          "non_null" : 80,
+          "smallest" : "E 33RD ST & THE ALAMEDA",
+          "null" : 0,
+          "largest" : "YORK RD & GITTINGS AVE",
+          "top" : [ {
+            "count" : 20,
+            "item" : "S CATON AVE & BENSON AVE"
+          }, {
+            "count" : 19,
+            "item" : "ERDMAN AVE & N MACON ST"
+          }, {
+            "count" : 18,
+            "item" : "PARK HEIGHTS AVE & HAYWARD AVE"
+          }, {
+            "count" : 17,
+            "item" : "W NORTHERN PKWY & GREENSPRING AVE"
+          }, {
+            "count" : 16,
+            "item" : "EDMONDSON AVE & N ATHOL AVE"
+          }, {
+            "count" : 15,
+            "item" : "SINCLAIR LN & SHANNON DR"
+          }, {
+            "count" : 14,
+            "item" : "LIBERTY HTS & HILLSDALE RD"
+          }, {
+            "count" : 13,
+            "item" : "RUSSELL ST & W HAMBURG ST"
+          }, {
+            "count" : 12,
+            "item" : "LIGHT ST & E PRATT ST"
+          }, {
+            "count" : 11,
+            "item" : "E LOMBARD ST & S GAY ST"
+          }, {
+            "count" : 10,
+            "item" : "HARFORD RD & E NORTH AVE"
+          }, {
+            "count" : 9,
+            "item" : "FORT SMALLWOOD RD & FORT ARMISTEAD RD"
+          }, {
+            "count" : 8,
+            "item" : "GARRISON BLVD & WABASH AVE"
+          }, {
+            "count" : 7,
+            "item" : "WALTHER AVE & GLENMORE AVE"
+          }, {
+            "count" : 6,
+            "item" : "W FRANKLIN ST & CATHEDRAL ST"
+          }, {
+            "count" : 5,
+            "item" : "PERRING PKWY & E BELVEDERE AVE"
+          }, {
+            "count" : 4,
+            "item" : "GWYNNS FLS & GARRISON BLVD"
+          }, {
+            "count" : 3,
+            "item" : "REISTERSTOWN RD & DRUID PARK DR"
+          }, {
+            "count" : 2,
+            "item" : "POTEE ST & TALBOTT ST"
+          }, {
+            "count" : 1,
+            "item" : "YORK RD & GITTINGS AVE"
+          } ]
+        },
+        "format" : {
+        }
+      }, {
+        "id" : 7666272,
+        "name" : "direction",
+        "dataTypeName" : "text",
+        "fieldName" : "direction",
+        "position" : 2,
+        "renderTypeName" : "text",
+        "tableColumnId" : 2224362,
+        "width" : 68,
+        "cachedContents" : {
+          "non_null" : 80,
+          "smallest" : "E/B",
+          "null" : 0,
+          "largest" : "W/B",
+          "top" : [ {
+            "count" : 20,
+            "item" : "N/B"
+          }, {
+            "count" : 19,
+            "item" : "S/B"
+          }, {
+            "count" : 18,
+            "item" : "E/B"
+          }, {
+            "count" : 17,
+            "item" : "W/B"
+          } ]
+        },
+        "format" : {
+        }
+      }, {
+        "id" : 7666273,
+        "name" : "street",
+        "dataTypeName" : "text",
+        "fieldName" : "street",
+        "position" : 3,
+        "renderTypeName" : "text",
+        "tableColumnId" : 2224363,
+        "width" : 172,
+        "cachedContents" : {
+          "non_null" : 80,
+          "smallest" : "Caton Ave",
+          "null" : 0,
+          "largest" : "York Rd \n",
+          "top" : [ {
+            "count" : 20,
+            "item" : "Caton Ave"
+          }, {
+            "count" : 19,
+            "item" : "Erdman"
+          }, {
+            "count" : 18,
+            "item" : "Orleans"
+          }, {
+            "count" : 17,
+            "item" : "Edmonson"
+          }, {
+            "count" : 16,
+            "item" : "Park Heights"
+          }, {
+            "count" : 15,
+            "item" : "Northern Pkwy"
+          }, {
+            "count" : 14,
+            "item" : "Cold Spring\n"
+          }, {
+            "count" : 13,
+            "item" : "Harford \n"
+          }, {
+            "count" : 12,
+            "item" : "Liberty Hghts\n"
+          }, {
+            "count" : 11,
+            "item" : "Garrison \n"
+          }, {
+            "count" : 10,
+            "item" : "Walther \n"
+          }, {
+            "count" : 9,
+            "item" : "Franklin \n"
+          }, {
+            "count" : 8,
+            "item" : "Perring Pkwy\n"
+          }, {
+            "count" : 7,
+            "item" : "Gwynns Falls \n"
+          }, {
+            "count" : 6,
+            "item" : "Reistertown Rd\n"
+          }, {
+            "count" : 5,
+            "item" : "Potee\n"
+          }, {
+            "count" : 4,
+            "item" : "York Rd \n"
+          }, {
+            "count" : 3,
+            "item" : "Wabash \n"
+          }, {
+            "count" : 2,
+            "item" : "Northern Pkwy\n"
+          }, {
+            "count" : 1,
+            "item" : "Reistertown \n"
+          } ]
+        },
+        "format" : {
+        }
+      }, {
+        "id" : 7666274,
+        "name" : "crossStreet",
+        "dataTypeName" : "text",
+        "fieldName" : "crossstreet",
+        "position" : 4,
+        "renderTypeName" : "text",
+        "tableColumnId" : 2224364,
+        "width" : 148,
+        "cachedContents" : {
+          "non_null" : 80,
+          "smallest" : "33rd St",
+          "null" : 0,
+          "largest" : "York Road",
+          "top" : [ {
+            "count" : 20,
+            "item" : "Benson Ave"
+          }, {
+            "count" : 19,
+            "item" : "The Alameda"
+          }, {
+            "count" : 18,
+            "item" : "Macon St"
+          }, {
+            "count" : 17,
+            "item" : "Gay St"
+          }, {
+            "count" : 16,
+            "item" : "Hayward Ave"
+          }, {
+            "count" : 15,
+            "item" : "Pratt St"
+          }, {
+            "count" : 14,
+            "item" : "Greenspring Ave"
+          }, {
+            "count" : 13,
+            "item" : "Woodbridge Ave"
+          }, {
+            "count" : 12,
+            "item" : "Shannon Drive"
+          }, {
+            "count" : 11,
+            "item" : "Hillsdale Ave"
+          }, {
+            "count" : 10,
+            "item" : "Hamburg St"
+          }, {
+            "count" : 9,
+            "item" : "Fort Armstead"
+          }, {
+            "count" : 8,
+            "item" : "Wabash Ave"
+          }, {
+            "count" : 7,
+            "item" : "Glenmore"
+          }, {
+            "count" : 6,
+            "item" : "Cathedral"
+          }, {
+            "count" : 5,
+            "item" : "Belvedere Ave"
+          }, {
+            "count" : 4,
+            "item" : "Garrison Blvd"
+          }, {
+            "count" : 3,
+            "item" : "Druid Lake Drive"
+          }, {
+            "count" : 2,
+            "item" : "Talbot"
+          }, {
+            "count" : 1,
+            "item" : "Gitting Ave"
+          } ]
+        },
+        "format" : {
+        }
+      }, {
+        "id" : 7666275,
+        "name" : "intersection",
+        "dataTypeName" : "text",
+        "fieldName" : "intersection",
+        "position" : 5,
+        "renderTypeName" : "text",
+        "tableColumnId" : 2224365,
+        "width" : 244,
+        "cachedContents" : {
+          "non_null" : 80,
+          "smallest" : " &",
+          "null" : 0,
+          "largest" : "York Rd \n & Gitting Ave",
+          "top" : [ {
+            "count" : 20,
+            "item" : "Caton Ave & Benson Ave"
+          }, {
+            "count" : 19,
+            "item" : "Erdman  & Macon St"
+          }, {
+            "count" : 18,
+            "item" : "Park Heights   & Hayward Ave"
+          }, {
+            "count" : 17,
+            "item" : "Liberty Hghts\n  & Hillsdale Ave"
+          }, {
+            "count" : 16,
+            "item" : "Edmonson  & Hilton St"
+          }, {
+            "count" : 15,
+            "item" : "President  & Fayette St"
+          }, {
+            "count" : 14,
+            "item" : "Russell \n & Hamburg St"
+          }, {
+            "count" : 13,
+            "item" : "Russell\n  & Hamburg St"
+          }, {
+            "count" : 12,
+            "item" : "Light SB \n & Pratt St"
+          }, {
+            "count" : 11,
+            "item" : "Lombard \n & Gay St"
+          }, {
+            "count" : 10,
+            "item" : "Harford Rd\n  & North Ave"
+          }, {
+            "count" : 9,
+            "item" : "Ft Smallwood\n  & Fort Armstead"
+          }, {
+            "count" : 8,
+            "item" : "Garrison \n & Wabash Ave"
+          }, {
+            "count" : 7,
+            "item" : "Walther \n & Glenmore"
+          }, {
+            "count" : 6,
+            "item" : "Franklin \n & Cathedral"
+          }, {
+            "count" : 5,
+            "item" : "Perring Pkwy\n  & Belvedere Ave"
+          }, {
+            "count" : 4,
+            "item" : "Gwynns Falls \n  & Garrison Blvd"
+          }, {
+            "count" : 3,
+            "item" : "Reistertown Rd\n  & Druid Lake Drive"
+          }, {
+            "count" : 2,
+            "item" : "Potee\n  & Talbot"
+          }, {
+            "count" : 1,
+            "item" : "York Rd \n & Gitting Ave"
+          } ]
+        },
+        "format" : {
+        }
+      }, {
+        "id" : 7666276,
+        "name" : "Location 1",
+        "dataTypeName" : "location",
+        "fieldName" : "location_1",
+        "position" : 6,
+        "renderTypeName" : "location",
+        "tableColumnId" : 2224366,
+        "width" : 220,
+        "cachedContents" : {
+          "non_null" : 80,
+          "smallest" : {
+            "longitude" : "-76.6688185297",
+            "latitude" : "39.2693779962"
+          },
+          "null" : 0,
+          "largest" : {
+            "longitude" : "-76.6251255783",
+            "latitude" : "39.3108706445"
+          },
+          "top" : [ {
+            "count" : 20,
+            "item" : {
+              "longitude" : "-76.6945100293",
+              "latitude" : "39.3304453818"
+            }
+          }, {
+            "count" : 19,
+            "item" : {
+              "longitude" : "-76.6176988692",
+              "latitude" : "39.3643110382"
+            }
+          }, {
+            "count" : 18,
+            "item" : {
+              "longitude" : "-76.5751846354",
+              "latitude" : "39.3353084656"
+            }
+          }, {
+            "count" : 17,
+            "item" : {
+              "longitude" : "-76.6462199216",
+              "latitude" : "39.3614127238"
+            }
+          }, {
+            "count" : 16,
+            "item" : {
+              "longitude" : "-76.6727600072",
+              "latitude" : "39.294061339"
+            }
+          }, {
+            "count" : 15,
+            "item" : {
+              "longitude" : "-76.6066648277",
+              "latitude" : "39.2906240776"
+            }
+          }, {
+            "count" : 14,
+            "item" : {
+              "longitude" : "-76.6237544477",
+              "latitude" : "39.2797863216"
+            }
+          }, {
+            "count" : 13,
+            "item" : {
+              "longitude" : "-76.6239105956",
+              "latitude" : "39.2798187398"
+            }
+          }, {
+            "count" : 12,
+            "item" : {
+              "longitude" : "-76.6135493898",
+              "latitude" : "39.2865415105"
+            }
+          }, {
+            "count" : 11,
+            "item" : {
+              "longitude" : "-76.6087475019",
+              "latitude" : "39.2877660778"
+            }
+          }, {
+            "count" : 10,
+            "item" : {
+              "longitude" : "-76.5993579666",
+              "latitude" : "39.3119363297"
+            }
+          }, {
+            "count" : 9,
+            "item" : {
+              "longitude" : "-76.5559766825",
+              "latitude" : "39.1999130165"
+            }
+          }, {
+            "count" : 8,
+            "item" : {
+              "longitude" : "-76.6831167251",
+              "latitude" : "39.3412090597"
+            }
+          }, {
+            "count" : 7,
+            "item" : {
+              "longitude" : "-76.5424942905",
+              "latitude" : "39.3535402213"
+            }
+          }, {
+            "count" : 6,
+            "item" : {
+              "longitude" : "-76.616872047",
+              "latitude" : "39.2950659131"
+            }
+          }, {
+            "count" : 5,
+            "item" : {
+              "longitude" : "-76.575725921",
+              "latitude" : "39.3549627467"
+            }
+          }, {
+            "count" : 4,
+            "item" : {
+              "longitude" : "-76.6762250182",
+              "latitude" : "39.3135792902"
+            }
+          }, {
+            "count" : 3,
+            "item" : {
+              "longitude" : "-76.6577109834",
+              "latitude" : "39.3252867997"
+            }
+          }, {
+            "count" : 2,
+            "item" : {
+              "longitude" : "-76.6122106478",
+              "latitude" : "39.2364856246"
+            }
+          }, {
+            "count" : 1,
+            "item" : {
+              "longitude" : "-76.6098121277",
+              "latitude" : "39.3704929583"
+            }
+          } ]
+        },
+        "format" : {
+        },
+        "subColumnTypes" : [ "human_address", "latitude", "longitude", "machine_address", "needs_recoding" ]
+      } ],
+      "displayFormat" : {
+        "viewport" : {
+          "ymin" : 39.221663,
+          "ymax" : 39.385842,
+          "xmin" : -77.004796,
+          "xmax" : -76.220647
+        },
+        "plotStyle" : "point",
+        "type" : "google",
+        "plot" : {
+          "locationId" : 2224366
+        }
+      },
+      "grants" : [ {
+        "inherited" : true,
+        "type" : "viewer",
+        "flags" : [ "public" ]
+      } ],
+      "license" : {
+        "name" : "Creative Commons Attribution 3.0 Unported",
+        "logoUrl" : "images/licenses/cc30by.png",
+        "termsLink" : "http://creativecommons.org/licenses/by/3.0/legalcode"
+      },
+      "metadata" : {
+        "renderTypeConfig" : {
+          "visible" : {
+            "map" : true,
+            "table" : true
+          }
+        },
+        "availableDisplayTypes" : [ "map", "table", "fatrow", "page" ],
+        "thumbnail" : {
+          "page" : {
+            "created" : true,
+            "selection" : {
+              "height" : 248,
+              "width" : 465,
+              "y1" : 520,
+              "y2" : 768,
+              "x2" : 465,
+              "x1" : 0
+            },
+            "filename" : "page.png-465.248.0.520.png"
+          }
+        },
+        "rdfSubject" : "0",
+        "rowIdentifier" : "0",
+        "rdfClass" : ""
+      },
+      "owner" : {
+        "id" : "36sd-xuaw",
+        "displayName" : "nicktann",
+        "emailUnsubscribed" : false,
+        "privacyControl" : "login",
+        "profileLastModified" : 1334171131,
+        "screenName" : "nicktann"
+      },
+      "query" : {
+      },
+      "rights" : [ "read" ],
+      "tableAuthor" : {
+        "id" : "n22b-663u",
+        "displayName" : "hchudson_bmore",
+        "emailUnsubscribed" : false,
+        "privacyControl" : "login",
+        "privilegesDisabled" : false,
+        "profileLastModified" : 1333638154,
+        "roleName" : "administrator",
+        "screenName" : "hchudson_bmore",
+        "rights" : [ "create_datasets", "edit_others_datasets", "edit_sdp", "edit_site_theme", "moderate_comments", "manage_users", "chown_datasets", "edit_nominations", "approve_nominations", "feature_items", "federations", "manage_stories", "manage_approval", "change_configurations", "view_domain", "view_others_datasets", "edit_pages", "create_pages" ]
+      },
+      "tags" : [ "speed", "transportation", "citation" ]
+    }
+  },
+  "data" : [ [ 1, "290A6A2D-0BD0-4AD0-ADD2-71BC3160A48D", 1, 1331298886, "393202", 1331298886, "393202", "{\n}", "S CATON AVE & BENSON AVE", "N/B", "Caton Ave", "Benson Ave", "Caton Ave & Benson Ave", [ null, "39.2693779962", "-76.6688185297", null, false ] ]
+, [ 2, "B3CF1F19-2FC3-4654-933C-97D96BCADE2F", 2, 1331298886, "393202", 1331298886, "393202", "{\n}", "S CATON AVE & BENSON AVE", "S/B", "Caton Ave", "Benson Ave", "Caton Ave & Benson Ave", [ null, "39.2693157898", "-76.6689698176", null, false ] ]
+, [ 3, "29E5BC8E-86BC-4F4C-8424-E471000DE8D4", 3, 1331298886, "393202", 1331298886, "393202", "{\n}", "WILKENS AVE & PINE HEIGHTS AVE", "E/B", "Wilkens Ave", "Pine Heights", "Wilkens Ave & Pine Heights", [ null, "39.2720252302", "-76.676960806", null, false ] ]
+, [ 4, "840D1E05-787C-48D0-982E-5AF0391DE3CE", 4, 1331298886, "393202", 1331298886, "393202", "{\n}", "THE ALAMEDA & E 33RD ST", "S/B", "The Alameda", "33rd St", "The Alameda  & 33rd St", [ null, "39.3285013141", "-76.5953545714", null, false ] ]
+, [ 5, "798001FA-7915-4263-89C4-89E2FBC5B3D3", 5, 1331298886, "393202", 1331298886, "393202", "{\n}", "E 33RD ST & THE ALAMEDA", "E/B", "E 33rd", "The Alameda", "E 33rd  & The Alameda", [ null, "39.3283410623", "-76.5953594625", null, false ] ]
+, [ 6, "96DC377D-34F2-41EA-9EFE-95F7CA99729D", 6, 1331298886, "393202", 1331298886, "393202", "{\n}", "ERDMAN AVE & N MACON ST", "E/B", "Erdman", "Macon St", "Erdman  & Macon St", [ null, "39.3068045671", "-76.5593167803", null, false ] ]
+, [ 7, "695D9FE9-ACA8-4EA9-A0A0-9A4AEFEE30EF", 7, 1331298886, "393202", 1331298886, "393202", "{\n}", "ERDMAN AVE & N MACON ST", "W/B", "Erdman", "Macon St", "Erdman  & Macon St", [ null, "39.306966535", "-76.5593122365", null, false ] ]
+, [ 8, "D9BFADCF-66CD-43C2-A380-FA7A5EE64121", 8, 1331298886, "393202", 1331298886, "393202", "{\n}", "N CHARLES ST & E LAKE AVE", "S/B", "Charles", "Lake Ave", "Charles & Lake Ave", [ null, "39.3690535299", "-76.625826716", null, false ] ]
+, [ 9, "779B0304-E94D-40B8-8930-CAFAD8DC7C69", 9, 1331298886, "393202", 1331298886, "393202", "{\n}", "E MADISON ST & N CAROLINE ST", "W/B", "Madison", "Caroline St", "Madison  & Caroline St", [ null, "39.2993257666", "-76.5976760827", null, false ] ]
+, [ 10, "DA403586-C4A2-409F-90B6-C9C8750A5CF1", 10, 1331298886, "393202", 1331298886, "393202", "{\n}", "ORLEANS ST & N LINWOOD AVE", "E/B", "Orleans", "Linwood Ave", "Orleans   & Linwood Ave", [ null, "39.2958661981", "-76.5764270078", null, false ] ]
+, [ 11, "D5A73F1E-F472-4A4E-AE51-9FBD0358D267", 11, 1331298886, "393202", 1331298886, "393202", "{\n}", "EASTERN AVE & KANE ST", "E/B", "Eastern", "Kane St", "Eastern  & Kane St", [ null, "39.2877626582", "-76.5371017795", null, false ] ]
+, [ 12, "D5154F01-93EC-4DAD-A8EF-3C6E9B9A666C", 12, 1331298886, "393202", 1331298886, "393202", "{\n}", "EDMONDSON AVE & COOKS LN", "E/B", "Edmonson", "Cooks Lane", "Edmonson  & Cooks Lane", [ null, "39.2923680595", "-76.7017056326", null, false ] ]
+, [ 13, "4F205596-E709-4F7D-ABC9-18D6D8EA048B", 13, 1331298886, "393202", 1331298886, "393202", "{\n}", "W FRANKLIN ST & N PULASKI ST", "W/B", "Franklin", "Pulaski St", "Franklin  & Pulaski St", [ null, "39.2937082594", "-76.6503837515", null, false ] ]
+, [ 14, "F253743B-4566-43E2-8E4F-B7E8D6A68521", 14, 1331298886, "393202", 1331298886, "393202", "{\n}", "ORLEANS ST & N GAY ST", "E/B", "Orleans", "Gay St", "Orleans  & Gay St", [ null, "39.2947203114", "-76.606128007", null, false ] ]
+, [ 15, "9B06A134-0DF6-428B-8F63-819EC0C3F683", 15, 1331298886, "393202", 1331298886, "393202", "{\n}", "S MARTIN LUTHER KING JR BLVD & WASHINGTON BLVD", "N/B", "MLK Jr. Blvd.", "Washington Blvd", "MLK Jr. Blvd.  & Washington Blvd", [ null, "39.2834598231", "-76.6261138807", null, false ] ]
+, [ 16, "84F7C266-76FA-41AE-A87F-4C6F2D6CD5BA", 16, 1331298886, "393202", 1331298886, "393202", "{\n}", "HILLEN RD & ARGONNE DR", "S/B", "Hillen Rd", "Argonne Drive", "Hillen Rd  & Argonne Drive", [ null, "39.3399907644", "-76.588021025", null, false ] ]
+, [ 17, "C19B802E-CFA6-4994-A5D5-F88C0154AD68", 17, 1331298886, "393202", 1331298886, "393202", "{\n}", "W NORTH AVE & N HOWARD ST", "W/B", "North Ave", "Howard St", "North Ave  & Howard St", [ null, "39.3110873669", "-76.6193071428", null, false ] ]
+, [ 18, "D1D5349A-2140-4909-9CB9-DC4E928A27AC", 18, 1331298886, "393202", 1331298886, "393202", "{\n}", "E PATAPSCO AVE & 4TH ST", "W/B", "Patapsco  \n", "4th St", "Patapsco  \n & 4th St", [ null, "39.2372692804", "-76.6054039252", null, false ] ]
+, [ 19, "DCCD3166-F76A-4BF7-B698-A6570C84EB2F", 19, 1331298886, "393202", 1331298886, "393202", "{\n}", "REISTERSTOWN RD & FALLSTAFF RD", "S/B", "Reisterstown", "Fallstaff Road", "Reisterstown   & Fallstaff Road", [ null, "39.3621351031", "-76.7102427408", null, false ] ]
+, [ 20, "148079FF-C956-434C-834C-199C2CAD935B", 20, 1331298886, "393202", 1331298886, "393202", "{\n}", "PARK HEIGHTS AVE & HAYWARD AVE", "N/B", "Park Heights", "Hayward Ave", "Park Heights   & Hayward Ave", [ null, "39.3499204055", "-76.6788706721", null, false ] ]
+, [ 21, "06BD9104-E3E1-4925-B34C-9119F43E00DB", 21, 1331298886, "393202", 1331298886, "393202", "{\n}", "PARK HEIGHTS AVE & HAYWARD AVE", "S/B", "Park Heights", "Hayward Ave", "Park Heights   & Hayward Ave", [ null, "39.3499204055", "-76.6788706721", null, false ] ]
+, [ 22, "1C26740B-45D2-4A82-B7EC-3422A4E093FB", 22, 1331298886, "393202", 1331298886, "393202", "{\n}", "S MARTIN LUTHER KING JR BLVD & W PRATT ST", "S/B", "MLK Jr. Blvd \n", "Pratt St", "MLK Jr. Blvd \n & Pratt St", [ null, "39.2860268994", "-76.6278460704", null, false ] ]
+, [ 23, "66D2A4BB-1FAE-4E5C-B3FE-CBC9B00B05E0", 23, 1331298886, "393202", 1331298886, "393202", "{\n}", "W NORTHERN PKWY & GREENSPRING AVE", "E/B", "Northern Pkwy", "Greenspring Ave", "Northern Pkwy   & Greenspring Ave", [ null, "39.3550243172", "-76.6604587972", null, false ] ]
+, [ 24, "DC6C63E5-1B64-4DC2-B850-BEE7A0F7E351", 24, 1331298886, "393202", 1331298886, "393202", "{\n}", "W NORTHERN PKWY & GREENSPRING AVE", "W/B", "Northern Pkwy", "Greenspring Ave", "Northern Pkwy  & Greenspring Ave", [ null, "39.3551612114", "-76.6605058823", null, false ] ]
+, [ 25, "336DD002-F6B8-40D0-A123-E22588E5FAE2", 25, 1331298886, "393202", 1331298886, "393202", "{\n}", "EDMONDSON AVE & N ATHOL AVE", "E/B", "Edmonson\n", "Woodbridge Ave", "Edmonson\n  & Woodbridge Ave", [ null, "39.2934525382", "-76.6893905792", null, false ] ]
+, [ 26, "40ACEF43-B790-4741-ABB4-C3FBA8DCEFB0", 26, 1331298886, "393202", 1331298886, "393202", "{\n}", "EDMONDSON AVE & N ATHOL AVE", "W/B", "Edmonson \n", "Woodbridge Ave", "Edmonson \n & Woodbridge Ave", [ null, "39.2935925831", "-76.689399241", null, false ] ]
+, [ 27, "1C11553C-1669-4B07-BCA8-5DCCD9C318AF", 27, 1331298886, "393202", 1331298886, "393202", "{\n}", "FREDERICK AVE & S CATHERINE ST", "E/B", "Fredrick Ave\n", "Catherine Ave", "Fredrick Ave\n & Catherine Ave", [ null, "39.2833935865", "-76.6559289926", null, false ] ]
+, [ 28, "48EA3190-439D-40B6-AE93-9F4146BA4259", 28, 1331298886, "393202", 1331298886, "393202", "{\n}", "PARK HEIGHTS AVE & VIOLET AVE", "N/B", "Park Heights", "Voilet Ave", "Park Heights  & Voilet Ave", [ null, "39.3307133383", "-76.6597502076", null, false ] ]
+, [ 29, "7EC6CC85-C158-4C94-85D7-232B4872862D", 29, 1331298886, "393202", 1331298886, "393202", "{\n}", "SINCLAIR LN & MORAVIA RD", "W/B", "Sinclair", "Moravia Road", "Sinclair  & Moravia Road", [ null, "39.3220360862", "-76.5484525966", null, false ] ]
+, [ 30, "3899882F-E928-4D82-935A-74B202C1B41E", 30, 1331298886, "393202", 1331298886, "393202", "{\n}", "WILKENS AVE & DESOTO RD", "E/B", "Wilkens", "DeSoto", "Wilkens  & DeSoto", [ null, "39.2749037576", "-76.6681630903", null, false ] ]
+, [ 31, "58A9929A-F4A8-4443-BDE9-CE285DE31D8C", 31, 1331298886, "393202", 1331298886, "393202", "{\n}", "E NORTHERN PKWY & WAVERLY WAY", "W/B", "Northern Pkwy", "Waverly St", "Northern Pkwy  & Waverly St", [ null, "39.367051509", "-76.5810739873", null, false ] ]
+, [ 32, "F344AB2A-898C-407C-AF02-5DEC35D71CB8", 32, 1331298886, "393202", 1331298886, "393202", "{\n}", "E COLD SPRING LN & HILLEN RD", "W/B", "Cold Spring", "Hillen Road", "Cold Spring  & Hillen Road", [ null, "39.3459074717", "-76.5859273904", null, false ] ]
+, [ 33, "6F682CEC-1CF1-43EE-8143-DC0CE9611C53", 33, 1331298886, "393202", 1331298886, "393202", "{\n}", "W COLD SPRING LN & ROLAND AVE", "E/B", "Cold Spring\n", "Roland Ave", "Cold Spring\n  & Roland Ave", [ null, "39.34390606", "-76.6354262185", null, false ] ]
+, [ 34, "19B02309-C7B2-4B06-A410-9BD7286DD99D", 34, 1331298886, "393202", 1331298886, "393202", "{\n}", "E COLD SPRING LN & LOCH RAVEN BLVD", "W/B", "Cold Spring\n", "Loch Raven Blvd", "Cold Spring\n  & Loch Raven Blvd", [ null, "39.3460452397", "-76.5920075335", null, false ] ]
+, [ 35, "A8198873-3C4C-4A5F-9903-3D85836A9A0E", 35, 1331298886, "393202", 1331298886, "393202", "{\n}", "TAMARIND RD & W COLD SPRING LN", "E/B", "Tamarind\n", "Coldspring Lane", "Tamarind\n  & Coldspring Lane", [ null, "39.343899313", "-76.6519407916", null, false ] ]
+, [ 36, "C668857B-8059-4555-9771-D776DC374A94", 36, 1331298886, "393202", 1331298886, "393202", "{\n}", "HARFORD RD & THE ALAMEDA", "N/B", "Harford \n", "The Alameda", "Harford \n & The Alameda", [ null, "39.3212074758", "-76.5907705888", null, false ] ]
+, [ 37, "EA03ABE8-E5AC-425E-973E-FD83B303740A", 37, 1331298886, "393202", 1331298886, "393202", "{\n}", "HARFORD RD & ROSALIE AVE", "N/B", "Harford\n", "Rosalie Ave", "Harford\n  & Rosalie Ave", [ null, "39.3680654859", "-76.5478183886", null, false ] ]
+, [ 38, "57B9861B-9D30-48AE-B65D-14B4D7E61F24", 38, 1331298886, "393202", 1331298886, "393202", "{\n}", "HARFORD RD & CHRISTOPHER AVE", "N/B", "Harford \n", "Christopher Ave", "Harford \n & Christopher Ave", [ null, "39.3583326463", "-76.5562471252", null, false ] ]
+, [ 39, "DF3D5F00-F99D-4247-B288-9534C5386F34", 39, 1331298886, "393202", 1331298886, "393202", "{\n}", "SINCLAIR LN & SHANNON DR", "E/B", "Sinclair\n", "Shannon Drive", "Sinclair\n  & Shannon Drive", [ null, "39.3175028074", "-76.5556737923", null, false ] ]
+, [ 40, "C9E090D6-C992-44C1-A04B-3D1A145A4FE0", 40, 1331298886, "393202", 1331298886, "393202", "{\n}", "SINCLAIR LN & SHANNON DR", "W/B", "Sinclair \n", "Shannon Drive", "Sinclair \n & Shannon Drive", [ null, "39.3175028074", "-76.5556737923", null, false ] ]
+, [ 41, "CF5DA912-AD7E-4A31-97CC-A4FC963E1E01", 41, 1331298886, "393202", 1331298886, "393202", "{\n}", "LIBERTY HTS & HILLSDALE RD", "E/B", "Liberty Hghts\n", "Hillsdale Ave", "Liberty Hghts\n  & Hillsdale Ave", [ null, "39.3304453818", "-76.6945100293", null, false ] ]
+, [ 42, "F6E1D55E-72FA-408D-8DFB-C0EC4B10A86A", 42, 1331298886, "393202", 1331298886, "393202", "{\n}", "LIBERTY HTS & HILLSDALE RD", "W/B", "Liberty Hghts\n", "Hillsdale Ave", "Liberty Hghts\n  & Hillsdale Ave", [ null, "39.3304453818", "-76.6945100293", null, false ] ]
+, [ 43, "4293F4F9-030F-4F0F-9E8C-3EDC5CECA62A", 43, 1331298886, "393202", 1331298886, "393202", "{\n}", "E NORTHERN PKWY & SPRINGLAKE WAY", "W/B", "Northern Pkwy\n", "Springlake Way", "Northern Pkwy\n  & Springlake Way", [ null, "39.3643110382", "-76.6176988692", null, false ] ]
+, [ 44, "5E1AF06A-2DCE-4A8E-B2AB-E55062D5C9D4", 44, 1331298886, "393202", 1331298886, "393202", "{\n}", "HARFORD RD & WALTHER AVE", "S/B", "Harford", "Walther Ave", "Harford  & Walther Ave", [ null, "39.3353084656", "-76.5751846354", null, false ] ]
+, [ 45, "535D224A-57B2-4DBF-880E-4581209D8DA2", 45, 1331298886, "393202", 1331298886, "393202", "{\n}", "W NORTHERN PKWY & FALLS RD", "W/B", "Northern Pkwy", "Falls Road", "Northern Pkwy  & Falls Road", [ null, "39.3614127238", "-76.6462199216", null, false ] ]
+, [ 46, "AD52DFC9-A5F7-4703-B064-8A682660BD2A", 46, 1331298886, "393202", 1331298886, "393202", "{\n}", "EDMONDSON AVE & N HILTON ST", "E/B", "Edmonson", "Hilton St", "Edmonson  & Hilton St", [ null, "39.294061339", "-76.6727600072", null, false ] ]
+, [ 47, "0FCAD5AE-A2A7-4492-BFE4-80E687158CE6", 47, 1331298886, "393202", 1331298886, "393202", "{\n}", "N PRESIDENT ST & E FAYETTE ST", "S/B", "President", "Fayette St", "President  & Fayette St", [ null, "39.2906240776", "-76.6066648277", null, false ] ]
+, [ 48, "2479540F-5C32-4BCB-BA9A-7C8DA6439155", 48, 1331298886, "393202", 1331298886, "393202", "{\n}", "RUSSELL ST & W HAMBURG ST", "N/B", "Russell \n", "Hamburg St", "Russell \n & Hamburg St", [ null, "39.2797863216", "-76.6237544477", null, false ] ]
+, [ 49, "C33CD57A-5378-4056-B060-3D96AA4B33BB", 49, 1331298886, "393202", 1331298886, "393202", "{\n}", "RUSSELL ST & W HAMBURG ST", "S/B", "Russell\n", "Hamburg St", "Russell\n  & Hamburg St", [ null, "39.2798187398", "-76.6239105956", null, false ] ]
+, [ 50, "B86B1D8E-F440-4924-94FC-CB039A5FDF23", 50, 1331298886, "393202", 1331298886, "393202", "{\n}", "LIGHT ST & E PRATT ST", "S/B", "Light SB \n", "Pratt St", "Light SB \n & Pratt St", [ null, "39.2865415105", "-76.6135493898", null, false ] ]
+, [ 51, "87743AF1-C464-4ECC-A2EE-DB9BC260F88F", 51, 1331298886, "393202", 1331298886, "393202", "{\n}", "E LOMBARD ST & S GAY ST", "W/B", "Lombard \n", "Gay St", "Lombard \n & Gay St", [ null, "39.2877660778", "-76.6087475019", null, false ] ]
+, [ 52, "8E7F7455-DE5B-4A65-B385-76E9D22366D6", 52, 1331298886, "393202", 1331298886, "393202", "{\n}", "HARFORD RD & E NORTH AVE", "N/B", "Harford Rd\n", "North Ave", "Harford Rd\n  & North Ave", [ null, "39.3119363297", "-76.5993579666", null, false ] ]
+, [ 53, "3A155502-BC6C-476A-A91B-BAD8419E0316", 53, 1331298886, "393202", 1331298886, "393202", "{\n}", "FORT SMALLWOOD RD & FORT ARMISTEAD RD", "S/B", "Ft Smallwood\n", "Fort Armstead", "Ft Smallwood\n  & Fort Armstead", [ null, "39.1999130165", "-76.5559766825", null, false ] ]
+, [ 54, "20FA03C6-FDA7-4B78-8531-ADAA44944CAF", 54, 1331298886, "393202", 1331298886, "393202", "{\n}", "GARRISON BLVD & WABASH AVE", "E/B", "Garrison \n", "Wabash Ave", "Garrison \n & Wabash Ave", [ null, "39.3412090597", "-76.6831167251", null, false ] ]
+, [ 55, "6A524FC2-05EE-45F7-A9FD-C03AFDD1D32A", 55, 1331298886, "393202", 1331298886, "393202", "{\n}", "WALTHER AVE & GLENMORE AVE", "N/B", "Walther \n", "Glenmore", "Walther \n & Glenmore", [ null, "39.3535402213", "-76.5424942905", null, false ] ]
+, [ 56, "63966382-BA03-49D1-91D8-D8F4C912AF85", 56, 1331298886, "393202", 1331298886, "393202", "{\n}", "W FRANKLIN ST & CATHEDRAL ST", "W/B", "Franklin \n", "Cathedral", "Franklin \n & Cathedral", [ null, "39.2950659131", "-76.616872047", null, false ] ]
+, [ 57, "282250A4-AEB4-4F64-8CE8-8EE7541ED7FB", 57, 1331298886, "393202", 1331298886, "393202", "{\n}", "PERRING PKWY & E BELVEDERE AVE", "S/B", "Perring Pkwy\n", "Belvedere Ave", "Perring Pkwy\n  & Belvedere Ave", [ null, "39.3549627467", "-76.575725921", null, false ] ]
+, [ 58, "32A1E834-7E27-4F71-9B77-B19FE88A7BFE", 58, 1331298886, "393202", 1331298886, "393202", "{\n}", "GWYNNS FLS & GARRISON BLVD", "W/B", "Gwynns Falls \n", "Garrison Blvd", "Gwynns Falls \n  & Garrison Blvd", [ null, "39.3135792902", "-76.6762250182", null, false ] ]
+, [ 59, "D393D967-E6DE-45A0-8E0A-D4A0944B4A3D", 59, 1331298886, "393202", 1331298886, "393202", "{\n}", "REISTERSTOWN RD & DRUID PARK DR", "S/B", "Reistertown Rd\n", "Druid Lake Drive", "Reistertown Rd\n  & Druid Lake Drive", [ null, "39.3252867997", "-76.6577109834", null, false ] ]
+, [ 60, "213CF7B3-291D-4BCD-A546-BFA9C5B158F0", 60, 1331298886, "393202", 1331298886, "393202", "{\n}", "POTEE ST & TALBOTT ST", "S/B", "Potee\n", "Talbot", "Potee\n  & Talbot", [ null, "39.2364856246", "-76.6122106478", null, false ] ]
+, [ 61, "17388D26-10CC-40C3-B4AF-8F2A32EEB1C5", 61, 1331298886, "393202", 1331298886, "393202", "{\n}", "YORK RD & GITTINGS AVE", "S/B", "York Rd \n", "Gitting Ave", "York Rd \n & Gitting Ave", [ null, "39.3704929583", "-76.6098121277", null, false ] ]
+, [ 62, "69275CAC-43D1-4AB2-8D79-BAE86F934A49", 62, 1331298886, "393202", 1331298886, "393202", "{\n}", "WABASH AVE & W BELVEDERE AVE", "E/B", "Wabash \n", "Belvedere Ave", "Wabash \n & Belvedere Ave", [ null, "39.3416713553", "-76.685042508", null, false ] ]
+, [ 63, "02DE24CC-635C-43DB-8CAD-DBCE4B538059", 63, 1331298886, "393202", 1331298886, "393202", "{\n}", "E NORTHERN PKWY & YORK RD", "W/B", "Northern Pkwy\n", "York Road", "Northern Pkwy\n  & York Road", [ null, "39.3651462024", "-76.6099220341", null, false ] ]
+, [ 64, "1D1589BA-87CF-4AB1-AEA8-86B8AB4EAD7D", 64, 1331298886, "393202", 1331298886, "393202", "{\n}", "REISTERSTOWN RD & PATTERSON AVE", "E/B", "Reistertown \n", "Patterson Ave", "Reistertown \n  & Patterson Ave", [ null, "39.3561820401", "-76.7025209585", null, false ] ]
+, [ 65, "6CC5DA4F-841F-4C4B-B534-FBC851F87F2F", 65, 1331298886, "393202", 1331298886, "393202", "{\n}", "PULASKI HWY & E MONUMENT ST", "E/B", "Pulaski Hwy \n", "Monument St", "Pulaski Hwy \n  & Monument St", [ null, "39.2997984532", "-76.5542506552", null, false ] ]
+, [ 66, "C5157063-DDCD-4902-8D03-389EC9EF681D", 66, 1331298886, "393202", 1331298886, "393202", "{\n}", "W FRANKLIN ST & N FRANKLINTOWN RD", "E/B", "Franklin \n", "Franklintown Road", "Franklin \n  & Franklintown Road", [ null, "39.2930857459", "-76.6623624871", null, false ] ]
+, [ 67, "7EBEF7B1-DCCB-4154-99D1-EAF6CE610C8B", 67, 1331298886, "393202", 1331298886, "393202", "{\n}", "S HANOVER ST & E CROMWELL ST", "S/B", "Hanover \n", "Cromwell St", " &", [ null, "39.2620595495", "-76.6145872791", null, false ] ]
+, [ 68, "22AE5C10-320D-4940-ADCF-15B5450E0EC4", 68, 1331298886, "393202", 1331298886, "393202", "{\n}", "REISTERSTOWN RD & MENLO DR", "N/B", "Reisterstown \n", "Menlo Drive", "Reisterstown \n & Menlo Drive", [ null, "39.3519849983", "-76.6963758159", null, false ] ]
+, [ 69, "33945627-3BAF-4B21-A579-6897C037300A", 69, 1331298886, "393202", 1331298886, "393202", "{\n}", "RUSSELL ST & BAYARD ST", "S/B", "Russell \n", "Bayard St", "Russell \n & Bayard St", [ null, "39.2734675536", "-76.6287385068", null, false ] ]
+, [ 70, "8396BF3C-8BE9-49DD-876B-37AC606B4489", 70, 1331298886, "393202", 1331298886, "393202", "{\n}", "LIBERTY HEIGHTS AVE & N DUKELAND ST", "E/B", "Liberty Hghts\n", "Dukeland St", "Liberty Hghts\n  & Dukeland St", [ null, "39.3226393684", "-76.6666335903", null, false ] ]
+, [ 71, "6B2EA001-1C90-415B-AEC7-CC51661C66FF", 71, 1331298886, "393202", 1331298886, "393202", "{\n}", "S HANOVER & REEDBIRD AVE", "N/B", "Hanover \n", "Reedbird Ave", "Hanover \n & Reedbird Ave", [ null, "39.2498797679", "-76.6137494417", null, false ] ]
+, [ 72, "CF8B5E6D-6985-41A2-9193-EC7227EB3DDD", 72, 1331298886, "393202", 1331298886, "393202", "{\n}", "W FAYETTE ST & N LIBERTY ST", "W/B", "Fayette\n", "Liberty Heights Ave", "Fayette\n  & Liberty Heights Ave", [ null, "39.2905038859", "-76.617661176", null, false ] ]
+, [ 73, "02B0FEB9-3FEB-4066-90F0-1963597FB46C", 73, 1331298886, "393202", 1331298886, "393202", "{\n}", "GWYNNS FLS & GARRISON BLVD", "E/B", "Gwynns Falls \n", "Garrison Blvd", "Gwynns Falls \n  & Garrison Blvd", [ null, "39.3135792902", "-76.6762250182", null, false ] ]
+, [ 74, "6FCB1B99-355E-452A-AA6A-3EA05BAA4418", 74, 1331298886, "393202", 1331298886, "393202", "{\n}", "LOCH RAVEN BLVD & WALKER AVE", "N/B", "Loch Raven\n", "Walker Ave", "Loch Raven\n  & Walker Ave", [ null, "39.3700602939", "-76.5831798122", null, false ] ]
+, [ 75, "2CD150A7-08E3-4242-AB97-E59BB79B4701", 75, 1331298886, "393202", 1331298886, "393202", "{\n}", "PULASKI HWY & MORAVIA PARK DR", "W/B", "\nPulaski Hwy \n", "Moravia Park Drive", "\nPulaski Hwy \n & Moravia Park Drive", [ null, "39.3086437141", "-76.5323658645", null, false ] ]
+, [ 76, "F8C46B03-2E4E-4B32-9A0D-86E196B68A61", 76, 1331298886, "393202", 1331298886, "393202", "{\n}", "HILLEN ST & FORREST ST", "W/B", "Hillen \n", "Forrest St", "Hillen \n & Forrest St", [ null, "39.2968601609", "-76.6055317698", null, false ] ]
+, [ 77, "426A4CE6-CE98-45D7-A7CC-1B6193475B4F", 77, 1331298886, "393202", 1331298886, "393202", "{\n}", "PULASKI HWY & NORTH POINT RD", "E/B", "Pulaski \n", "North Point Blvd", "Pulaski \n & North Point Blvd", [ null, "39.3043275894", "-76.5395800163", null, false ] ]
+, [ 78, "46C0FED9-B7F7-4685-96D4-2CEC0982D555", 78, 1331298886, "393202", 1331298886, "393202", "{\n}", "N MONROE ST & W LAFAYETTE AVE", "S/B", "Monroe\n", "Lafayette", "Monroe\n & Lafayette", [ null, "39.2987426878", "-76.647517496", null, false ] ]
+, [ 79, "0D0A8265-7D37-45BE-94DC-267B1E08C195", 79, 1331298886, "393202", 1331298886, "393202", "{\n}", "W MOUNT ROYAL AVE & W NORTH AVE", "N/B", "Mt Royal\n", "North", "Mt Royal\n & North", [ null, "39.3107672842", "-76.6247302963", null, false ] ]
+, [ 80, "68D99AD7-B917-41C1-B161-5E73D9BABBD7", 80, 1331298886, "393202", 1331298886, "393202", "{\n}", "MOUNT ROYAL TER & W NORTH AVE", "S/B", "Mt Royal\n", "North", "Mt Royal\n & North", [ null, "39.3108706445", "-76.6251255783", null, false ] ]
+ ]
+}

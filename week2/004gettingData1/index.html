@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Getting Data (Part 1)</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Getting Data (Part 1)">
+  <meta name="author" content="Jeffrey Leek, Assistant Professor of Biostatistics">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/zenburn.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+    <link rel="stylesheet" href = "assets/css/custom.css">
+<link rel="stylesheet" href = "assets/css/ribbons.css">
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+    <!-- END LOGO SLIDE -->
+    
+
+    <!-- TITLE SLIDE -->
+    <!-- Should I move this to a Local Layout File? -->
+    <slide class="title-slide segue nobackground">
+      <hgroup class="auto-fadein">
+        <h1>Getting Data (Part 1)</h1>
+        <h2></h2>
+        <p>Jeffrey Leek, Assistant Professor of Biostatistics<br/>Johns Hopkins Bloomberg School of Public Health</p>
+      </hgroup>
+          </slide>
+
+    <!-- SLIDES -->
+      <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h2>Get/set your working directory</h2>
+  </hgroup>
+  <article>
+    <p>Roger&#39;s lectures <a href="http://www.youtube.com/watch?v=XBcvH1BpIBo&amp;list=PLjTlxb-wKvXNSDfcKPFH2gzHGyjpeCZmJ&amp;index=2">windows</a>, <a href="http://www.youtube.com/watch?v=8xT3hmJQskU&amp;list=PLjTlxb-wKvXNSDfcKPFH2gzHGyjpeCZmJ&amp;index=1">mac</a>
+Andrew Jaffe&#39;s <a href="https://dl.dropbox.com/u/7710864/courseraPublic/otherResources/lecture1/index.html">lecture notes</a></p>
+
+<pre><code class="r">getwd()
+</code></pre>
+
+<pre><code>[1] &quot;/Users/jtleek/Dropbox/Jeff/teaching/2013/coursera/week2/004gettingData1&quot;
+</code></pre>
+
+<pre><code class="r">setwd(&quot;/Users/jtleek/Dropbox/Jeff/teaching/2013/coursera/week2/004gettingData1/data&quot;)
+getwd()
+</code></pre>
+
+<pre><code>[1] &quot;/Users/jtleek/Dropbox/Jeff/teaching/2013/coursera/week2/004gettingData1/data&quot;
+</code></pre>
+
+<p>Important difference with Windows: </p>
+
+<pre><code class="r"> setwd(&quot;C:\\Users\\Andrew\\Downloads&quot;)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-2" style="background:;">
+  <hgroup>
+    <h2>Get/set your working directory (relative paths)</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">getwd()
+</code></pre>
+
+<pre><code>[1] &quot;/Users/jtleek/Dropbox/Jeff/teaching/2013/coursera/week2/004gettingData1&quot;
+</code></pre>
+
+<pre><code class="r">setwd(&quot;./data&quot;)
+getwd()
+</code></pre>
+
+<pre><code>[1] &quot;/Users/jtleek/Dropbox/Jeff/teaching/2013/coursera/week2/004gettingData1/data&quot;
+</code></pre>
+
+<pre><code class="r">setwd(&quot;../&quot;)
+getwd()
+</code></pre>
+
+<pre><code>[1] &quot;/Users/jtleek/Dropbox/Jeff/teaching/2013/coursera/week2/004gettingData1&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h2>Get/set your working directory (relative paths)</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">getwd()
+</code></pre>
+
+<pre><code>[1] &quot;/Users/jtleek/Dropbox/Jeff/teaching/2013/coursera/week2/004gettingData1&quot;
+</code></pre>
+
+<pre><code class="r">setwd(&quot;/Users/jtleek/Dropbox/Jeff/teaching/2013/coursera/week2/004gettingData1/data&quot;)
+getwd()
+</code></pre>
+
+<pre><code>[1] &quot;/Users/jtleek/Dropbox/Jeff/teaching/2013/coursera/week2/004gettingData1/data&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>Types of files data may come from</h2>
+  </hgroup>
+  <article>
+    <ul>
+<li>Tab-delimited text</li>
+<li>Comma-separated text</li>
+<li>Excel file</li>
+<li>JSON File </li>
+<li>HTML/XML file</li>
+<li>Database</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-5" style="background:;">
+  <hgroup>
+    <h2>Where you can get data</h2>
+  </hgroup>
+  <article>
+    <ul>
+<li>From a colleague</li>
+<li>From the web</li>
+<li>From an application programming interface</li>
+<li>By scraping a web page </li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-6" style="background:;">
+  <hgroup>
+    <h2>Getting data from the internet - download.file()</h2>
+  </hgroup>
+  <article>
+    <ul>
+<li>Downloads a file from the internet</li>
+<li>Even if you could do this by hand, helps with reproducibility</li>
+<li>Important parameters are <em>url</em>, <em>destfile</em>, <em>method</em></li>
+<li>Useful for downloading tab-delimited, csv, etc. </li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-7" style="background:;">
+  <hgroup>
+    <h2>Example - Baltimore camera data</h2>
+  </hgroup>
+  <article>
+    <p><img class=center src=assets/img/cameras.png height='80%'/></p>
+
+<p><a href="https://data.baltimorecity.gov/Transportation/Baltimore-Fixed-Speed-Cameras/dz54-2aru">https://data.baltimorecity.gov/Transportation/Baltimore-Fixed-Speed-Cameras/dz54-2aru</a></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-8" style="background:;">
+  <hgroup>
+    <h2>Example - Baltimore camera data,csv</h2>
+  </hgroup>
+  <article>
+    <p><img class=center src=assets/img/cameraslink.png height='80%'/></p>
+
+<p><a href="https://data.baltimorecity.gov/Transportation/Baltimore-Fixed-Speed-Cameras/dz54-2aru">https://data.baltimorecity.gov/Transportation/Baltimore-Fixed-Speed-Cameras/dz54-2aru</a></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-9" style="background:;">
+  <hgroup>
+    <h2>Download a file from the web</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">fileUrl &lt;- &quot;https://data.baltimorecity.gov/api/views/dz54-2aru/rows.csv?accessType=DOWNLOAD&quot;
+download.file(fileUrl,destfile=&quot;./data/cameras.csv&quot;,method=&quot;curl&quot;)
+list.files(&quot;./data&quot;)
+</code></pre>
+
+<pre><code>[1] &quot;camera.json&quot;         &quot;camera.xlsx&quot;         &quot;cameras.csv&quot;        
+[4] &quot;cameras.rda&quot;         &quot;camerasModified.csv&quot;
+</code></pre>
+
+<pre><code class="r">dateDownloaded &lt;- date()
+dateDownloaded
+</code></pre>
+
+<pre><code>[1] &quot;Sun Jan 27 12:21:15 2013&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-10" style="background:;">
+  <hgroup>
+    <h2>Some notes about download.file()</h2>
+  </hgroup>
+  <article>
+    <ul>
+<li>If the url starts with <em>http</em> you can use download.file()</li>
+<li>If the url starts with <em>https</em> on Windows you may be ok</li>
+<li>If the url starts with <em>https</em> on Mac you may need to set <em>method=&quot;curl&quot;</em></li>
+<li>If the file is big, this might take a while</li>
+<li>Be sure to record when you downloaded. </li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-11" style="background:;">
+  <hgroup>
+    <h2>Loading data you have saved - read.table()</h2>
+  </hgroup>
+  <article>
+    <ul>
+<li>This is the main function for reading data into R</li>
+<li>Flexible and robust but requires more parameters</li>
+<li>Reads the data into RAM - big data can cause problems</li>
+<li>Important parameters <em>file</em>, <em>header</em>, <em>sep</em>, <em>row.names</em>, <em>nrows</em></li>
+<li>Related: <em>read.csv()</em>, <em>read.csv2()</em></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-12" style="background:;">
+  <hgroup>
+    <h2>Example: Baltimore camera data</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">getwd()
+</code></pre>
+
+<pre><code>[1] &quot;/Users/jtleek/Dropbox/Jeff/teaching/2013/coursera/week2/004gettingData1&quot;
+</code></pre>
+
+<pre><code class="r">cameraData &lt;- read.table(&quot;./data/cameras.csv&quot;)
+</code></pre>
+
+<pre><code>Error: line 1 did not have 13 elements
+</code></pre>
+
+<pre><code class="r">head(cameraData)
+</code></pre>
+
+<pre><code>Error: error in evaluating the argument &#39;x&#39; in selecting a method for
+function &#39;head&#39;: Error: object &#39;cameraData&#39; not found
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-13" style="background:;">
+  <hgroup>
+    <h2>Example: Baltimore camera data</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">getwd()
+</code></pre>
+
+<pre><code>[1] &quot;/Users/jtleek/Dropbox/Jeff/teaching/2013/coursera/week2/004gettingData1&quot;
+</code></pre>
+
+<pre><code class="r">cameraData &lt;- read.table(&quot;./data/cameras.csv&quot;,sep=&quot;,&quot;,header=TRUE)
+head(cameraData)
+</code></pre>
+
+<pre><code>                         address direction      street  crossStreet
+1       S CATON AVE &amp; BENSON AVE       N/B   Caton Ave   Benson Ave
+2       S CATON AVE &amp; BENSON AVE       S/B   Caton Ave   Benson Ave
+3 WILKENS AVE &amp; PINE HEIGHTS AVE       E/B Wilkens Ave Pine Heights
+4        THE ALAMEDA &amp; E 33RD ST       S/B The Alameda      33rd St
+5        E 33RD ST &amp; THE ALAMEDA       E/B      E 33rd  The Alameda
+6        ERDMAN AVE &amp; N MACON ST       E/B      Erdman     Macon St
+                intersection                      Location.1
+1     Caton Ave &amp; Benson Ave (39.2693779962, -76.6688185297)
+2     Caton Ave &amp; Benson Ave (39.2693157898, -76.6689698176)
+3 Wilkens Ave &amp; Pine Heights  (39.2720252302, -76.676960806)
+4     The Alameda  &amp; 33rd St (39.3285013141, -76.5953545714)
+5      E 33rd  &amp; The Alameda (39.3283410623, -76.5953594625)
+6         Erdman  &amp; Macon St (39.3068045671, -76.5593167803)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-14" style="background:;">
+  <hgroup>
+    <h2>Example: Baltimore camera data</h2>
+  </hgroup>
+  <article>
+    <p>read.csv sets <em>sep=&quot;,&quot;</em> and <em>header=TRUE</em> </p>
+
+<pre><code class="r">cameraData &lt;- read.csv(&quot;./data/cameras.csv&quot;)
+head(cameraData)
+</code></pre>
+
+<pre><code>                         address direction      street  crossStreet
+1       S CATON AVE &amp; BENSON AVE       N/B   Caton Ave   Benson Ave
+2       S CATON AVE &amp; BENSON AVE       S/B   Caton Ave   Benson Ave
+3 WILKENS AVE &amp; PINE HEIGHTS AVE       E/B Wilkens Ave Pine Heights
+4        THE ALAMEDA &amp; E 33RD ST       S/B The Alameda      33rd St
+5        E 33RD ST &amp; THE ALAMEDA       E/B      E 33rd  The Alameda
+6        ERDMAN AVE &amp; N MACON ST       E/B      Erdman     Macon St
+                intersection                      Location.1
+1     Caton Ave &amp; Benson Ave (39.2693779962, -76.6688185297)
+2     Caton Ave &amp; Benson Ave (39.2693157898, -76.6689698176)
+3 Wilkens Ave &amp; Pine Heights  (39.2720252302, -76.676960806)
+4     The Alameda  &amp; 33rd St (39.3285013141, -76.5953545714)
+5      E 33rd  &amp; The Alameda (39.3283410623, -76.5953594625)
+6         Erdman  &amp; Macon St (39.3068045671, -76.5593167803)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-15" style="background:;">
+  <hgroup>
+    <h2>read.xlsx(), read.xlsx2() {xlsx package}</h2>
+  </hgroup>
+  <article>
+    <ul>
+<li>Reads .xlsx files, but slow</li>
+<li>Important parameters <em>file</em>, <em>sheetIndex</em>, <em>sheetIndex</em>, <em>rowIndex</em>, <em>colIndex</em>, <em>header</em></li>
+<li>read.xlsx2() relies more on low level Java functions so may be a bit faster</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-16" style="background:;">
+  <hgroup>
+    <h2>read.xlsx() - Baltimore camera data</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">library(xlsx)
+fileUrl &lt;- &quot;https://data.baltimorecity.gov/api/views/dz54-2aru/rows.xlsx?accessType=DOWNLOAD&quot;
+download.file(fileUrl,destfile=&quot;./data/camera.xlsx&quot;,method=&quot;curl&quot;)
+cameraData &lt;- read.xlsx2(&quot;./data/camera.xlsx&quot;,sheetIndex=1)
+head(cameraData)
+</code></pre>
+
+<pre><code>                         address direction      street  crossStreet
+1       S CATON AVE &amp; BENSON AVE       N/B   Caton Ave   Benson Ave
+2       S CATON AVE &amp; BENSON AVE       S/B   Caton Ave   Benson Ave
+3 WILKENS AVE &amp; PINE HEIGHTS AVE       E/B Wilkens Ave Pine Heights
+4        THE ALAMEDA &amp; E 33RD ST       S/B The Alameda      33rd St
+5        E 33RD ST &amp; THE ALAMEDA       E/B      E 33rd  The Alameda
+6        ERDMAN AVE &amp; N MACON ST       E/B      Erdman     Macon St
+                intersection                      Location.1
+1     Caton Ave &amp; Benson Ave (39.2693779962, -76.6688185297)
+2     Caton Ave &amp; Benson Ave (39.2693157898, -76.6689698176)
+3 Wilkens Ave &amp; Pine Heights  (39.2720252302, -76.676960806)
+4     The Alameda  &amp; 33rd St (39.3285013141, -76.5953545714)
+5      E 33rd  &amp; The Alameda (39.3283410623, -76.5953594625)
+6         Erdman  &amp; Macon St (39.3068045671, -76.5593167803)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-17" style="background:;">
+  <hgroup>
+    <h2>Picking a file - less reproducible, but useful</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">cameraData &lt;- read.csv(file.choose())
+</code></pre>
+
+<p><img class=center src=assets/img/filechoose.png height='80%'/></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+
+  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+<!-- Grab CDN jQuery, fall back to local if offline -->
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+<script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery-1.7.min.js"><\/script>')</script>
+<!-- Load Javascripts for Widgets -->
+<!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script> -->
+<script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
+<!-- LOAD HIGHLIGHTER JS FILES -->
+<script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<!-- DONE LOADING HIGHLIGHTER JS FILES -->
+</html>

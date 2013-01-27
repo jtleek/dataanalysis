@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Data munging basics</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Data munging basics">
+  <meta name="author" content="Jeffrey Leek, Assistant Professor of Biostatistics">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/zenburn.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+    <link rel="stylesheet" href = "assets/css/custom.css">
+<link rel="stylesheet" href = "assets/css/ribbons.css">
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+    <!-- END LOGO SLIDE -->
+    
+
+    <!-- TITLE SLIDE -->
+    <!-- Should I move this to a Local Layout File? -->
+    <slide class="title-slide segue nobackground">
+      <hgroup class="auto-fadein">
+        <h1>Data munging basics</h1>
+        <h2></h2>
+        <p>Jeffrey Leek, Assistant Professor of Biostatistics<br/>Johns Hopkins Bloomberg School of Public Health</p>
+      </hgroup>
+          </slide>
+
+    <!-- SLIDES -->
+      <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h2>Recall Tidy Data</h2>
+  </hgroup>
+  <article>
+    <p><img class=center src=assets/img/excel.png height='50%'/></p>
+
+<ol>
+<li>Each variable forms a column</li>
+<li>Each observation forms a row</li>
+<li>Each table/file stores data about one kind of observation (e.g. people/hospitals).</li>
+</ol>
+
+<p><a href="http://vita.had.co.nz/papers/tidy-data.pdf">http://vita.had.co.nz/papers/tidy-data.pdf</a></p>
+
+<p><a href="http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0026895">Leek, Taub, and Pineda 2011 PLoS One</a></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-2" style="background:;">
+  <hgroup>
+    <h2>Where we would like to be</h2>
+  </hgroup>
+  <article>
+    <ul>
+<li><a href="%5Bhttp://vita.had.co.nz/papers/tidy-data.pdf%5D(http://vita.had.co.nz/papers/tidy-data.pdf">Tidy data</a> refers to the shape of the data
+
+<ul>
+<li>Variables in columns</li>
+<li>Observations in rows</li>
+<li>Tables holding elements of only one kind</li>
+</ul></li>
+<li>Plus
+
+<ul>
+<li>Column names are easy to use and informative</li>
+<li>Row names are easy to use and informative</li>
+<li>Obvious mistakes in the data have been removed</li>
+<li>Variable values are internally consistent</li>
+<li>Appropriate transformed variables have been added</li>
+</ul></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h2>A partial list of munging operations</h2>
+  </hgroup>
+  <article>
+    <ul>
+<li>Fix variable names</li>
+<li>Create new variables </li>
+<li>Merge data sets</li>
+<li>Reshape data sets</li>
+<li>Deal with missing data </li>
+<li>Take transforms of variables</li>
+<li>Check on and remove inconsistent values</li>
+</ul>
+
+<p><strong>These steps must be recorded</strong></p>
+
+<p><strong>90% of your effort will often be spent here</strong></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>A partial list of munging operations</h2>
+  </hgroup>
+  <article>
+    <ul>
+<li><redtext> Fix variable names </redtext></li>
+<li><redtext> Create new variables </redtext></li>
+<li><redtext> Merge data sets</redtext></li>
+<li><redtext> Reshape data sets</redtext></li>
+<li>Deal with missing data </li>
+<li>Take transforms of variables</li>
+<li>Check on and remove inconsistent values</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-5" style="background:;">
+  <hgroup>
+    <h2>Fixing character vectors - tolower(), toupper()</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">cameraData &lt;- read.csv(&quot;./data/cameras.csv&quot;)
+names(cameraData)
+</code></pre>
+
+<pre><code>[1] &quot;address&quot;      &quot;direction&quot;    &quot;street&quot;       &quot;crossStreet&quot; 
+[5] &quot;intersection&quot; &quot;Location.1&quot;  
+</code></pre>
+
+<pre><code class="r">tolower(names(cameraData))
+</code></pre>
+
+<pre><code>[1] &quot;address&quot;      &quot;direction&quot;    &quot;street&quot;       &quot;crossstreet&quot; 
+[5] &quot;intersection&quot; &quot;location.1&quot;  
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-6" style="background:;">
+  <hgroup>
+    <h2>Fixing character vectors - strsplit()</h2>
+  </hgroup>
+  <article>
+    <ul>
+<li>Good for automatically splitting variable names</li>
+<li>Important parameters: <em>x</em>, <em>split</em></li>
+</ul>
+
+<pre><code class="r">splitNames = strsplit(names(cameraData),&quot;\\.&quot;)
+splitNames[[5]]
+</code></pre>
+
+<pre><code>[1] &quot;intersection&quot;
+</code></pre>
+
+<pre><code class="r">splitNames[[6]]
+</code></pre>
+
+<pre><code>[1] &quot;Location&quot; &quot;1&quot;       
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-7" style="background:;">
+  <hgroup>
+    <h2>Fixing character vectors - sapply()</h2>
+  </hgroup>
+  <article>
+    <ul>
+<li>Applies a function to each element in a vector or list</li>
+<li>Important parameters: <em>X</em>,<em>FUN</em></li>
+</ul>
+
+<pre><code class="r">splitNames[[6]][1]
+</code></pre>
+
+<pre><code>[1] &quot;Location&quot;
+</code></pre>
+
+<pre><code class="r">firstElement &lt;- function(x){x[1]}
+sapply(splitNames,firstElement)
+</code></pre>
+
+<pre><code>[1] &quot;address&quot;      &quot;direction&quot;    &quot;street&quot;       &quot;crossStreet&quot; 
+[5] &quot;intersection&quot; &quot;Location&quot;    
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-8" style="background:;">
+  <hgroup>
+    <h2>Peer review experiment data</h2>
+  </hgroup>
+  <article>
+    <ul>
+<li>Data on submissions/reviews in an experiment </li>
+</ul>
+
+<p><img class=center src=assets/img/cooperation.png height='60%'/></p>
+
+<p><a href="http://www.plosone.org/article/info:doi/10.1371/journal.pone.0026895">http://www.plosone.org/article/info:doi/10.1371/journal.pone.0026895</a></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-9" style="background:;">
+  <hgroup>
+    <h2>Peer review data</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">fileUrl1 &lt;- &quot;https://dl.dropbox.com/u/7710864/data/reviews-apr29.csv&quot;
+fileUrl2 &lt;- &quot;https://dl.dropbox.com/u/7710864/data/solutions-apr29.csv&quot;
+download.file(fileUrl1,destfile=&quot;./data/reviews.csv&quot;,method=&quot;curl&quot;)
+download.file(fileUrl2,destfile=&quot;./data/solutions.csv&quot;,method=&quot;curl&quot;)
+reviews &lt;- read.csv(&quot;./data/reviews.csv&quot;); solutions &lt;- read.csv(&quot;./data/solutions.csv&quot;)
+head(reviews,2)
+</code></pre>
+
+<pre><code>  id solution_id reviewer_id      start       stop time_left accept
+1  1           3          27 1304095698 1304095758      1754      1
+2  2           4          22 1304095188 1304095206      2306      1
+</code></pre>
+
+<pre><code class="r">head(solutions,2)
+</code></pre>
+
+<pre><code>  id problem_id subject_id      start       stop time_left answer
+1  1        156         29 1304095119 1304095169      2343      B
+2  2        269         25 1304095119 1304095183      2329      C
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-10" style="background:;">
+  <hgroup>
+    <h2>Fixing character vectors - sub(),gsub()</h2>
+  </hgroup>
+  <article>
+    <ul>
+<li>Important parameters: <em>pattern</em>, <em>replacement</em>, <em>x</em></li>
+</ul>
+
+<pre><code class="r">names(reviews)
+</code></pre>
+
+<pre><code>[1] &quot;id&quot;          &quot;solution_id&quot; &quot;reviewer_id&quot; &quot;start&quot;      
+[5] &quot;stop&quot;        &quot;time_left&quot;   &quot;accept&quot;     
+</code></pre>
+
+<pre><code class="r">sub(&quot;_&quot;,&quot;&quot;,names(reviews),)
+</code></pre>
+
+<pre><code>[1] &quot;id&quot;         &quot;solutionid&quot; &quot;reviewerid&quot; &quot;start&quot;      &quot;stop&quot;      
+[6] &quot;timeleft&quot;   &quot;accept&quot;    
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-11" style="background:;">
+  <hgroup>
+    <h2>Fixing character vectors - sub(),gsub()</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">testName &lt;- &quot;this_is_a_test&quot;
+sub(&quot;_&quot;,&quot;&quot;,testName)
+</code></pre>
+
+<pre><code>[1] &quot;thisis_a_test&quot;
+</code></pre>
+
+<pre><code class="r">gsub(&quot;_&quot;,&quot;&quot;,testName)
+</code></pre>
+
+<pre><code>[1] &quot;thisisatest&quot;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-12" style="background:;">
+  <hgroup>
+    <h2>Quantitative variables in ranges -  - cut()</h2>
+  </hgroup>
+  <article>
+    <ul>
+<li>Important parameters: <em>x</em>,<em>breaks</em></li>
+</ul>
+
+<pre><code class="r">reviews$time_left[1:10]
+</code></pre>
+
+<pre><code> [1] 1754 2306 2192 2089 2043 1999 2130   NA 1899 2024
+</code></pre>
+
+<pre><code class="r">timeRanges &lt;- cut(reviews$time_left,seq(0,3600,by=600))
+timeRanges[1:10]
+</code></pre>
+
+<pre><code> [1] (1.2e+03,1.8e+03] (1.8e+03,2.4e+03] (1.8e+03,2.4e+03]
+ [4] (1.8e+03,2.4e+03] (1.8e+03,2.4e+03] (1.8e+03,2.4e+03]
+ [7] (1.8e+03,2.4e+03] &lt;NA&gt;              (1.8e+03,2.4e+03]
+[10] (1.8e+03,2.4e+03]
+6 Levels: (0,600] (600,1.2e+03] ... (3e+03,3.6e+03]
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-13" style="background:;">
+  <hgroup>
+    <h2>Quantitative variables in ranges -  - cut()</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">class(timeRanges)
+</code></pre>
+
+<pre><code>[1] &quot;factor&quot;
+</code></pre>
+
+<pre><code class="r">table(timeRanges,useNA=&quot;ifany&quot;)
+</code></pre>
+
+<pre><code>timeRanges
+          (0,600]     (600,1.2e+03] (1.2e+03,1.8e+03] 
+               30                32                25 
+(1.8e+03,2.4e+03]   (2.4e+03,3e+03]   (3e+03,3.6e+03] 
+               28                 0                 0 
+             &lt;NA&gt; 
+               84 
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-14" style="background:;">
+  <hgroup>
+    <h2>Quantitative variables in ranges - cut2() {Hmisc}</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">library(Hmisc)
+timeRanges&lt;- cut2(reviews$time_left,g=6)
+table(timeRanges,useNA=&quot;ifany&quot;)
+</code></pre>
+
+<pre><code>timeRanges
+[  22, 384) [ 384, 759) [ 759,1150) [1150,1496) [1496,1909) 
+         20          19          19          19          19 
+[1909,2306]        &lt;NA&gt; 
+         19          84 
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-15" style="background:;">
+  <hgroup>
+    <h2>Adding an extra variable</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">timeRanges&lt;- cut2(reviews$time_left,g=6)
+reviews$timeRanges &lt;- timeRanges
+head(reviews,2)
+</code></pre>
+
+<pre><code>  id solution_id reviewer_id      start       stop time_left accept
+1  1           3          27 1304095698 1304095758      1754      1
+2  2           4          22 1304095188 1304095206      2306      1
+   timeRanges
+1 [1496,1909)
+2 [1909,2306]
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-16" style="background:;">
+  <hgroup>
+    <h2>Merging data - merge()</h2>
+  </hgroup>
+  <article>
+    <ul>
+<li>Merges data frames</li>
+<li>Important parameters: <em>x</em>,<em>y</em>,<em>by</em>,<em>by.x</em>,<em>by.y</em>,<em>all</em></li>
+</ul>
+
+<pre><code class="r">names(reviews)
+</code></pre>
+
+<pre><code>[1] &quot;id&quot;          &quot;solution_id&quot; &quot;reviewer_id&quot; &quot;start&quot;      
+[5] &quot;stop&quot;        &quot;time_left&quot;   &quot;accept&quot;      &quot;timeRanges&quot; 
+</code></pre>
+
+<pre><code class="r">names(solutions)
+</code></pre>
+
+<pre><code>[1] &quot;id&quot;         &quot;problem_id&quot; &quot;subject_id&quot; &quot;start&quot;      &quot;stop&quot;      
+[6] &quot;time_left&quot;  &quot;answer&quot;    
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-17" style="background:;">
+  <hgroup>
+    <h2>Merging data - merge()</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">mergedData &lt;- merge(reviews,solutions,all=TRUE)
+head(mergedData)
+</code></pre>
+
+<pre><code>  id      start       stop time_left solution_id reviewer_id accept
+1  1 1304095119 1304095169      2343          NA          NA     NA
+2  1 1304095698 1304095758      1754           3          27      1
+3  2 1304095119 1304095183      2329          NA          NA     NA
+4  2 1304095188 1304095206      2306           4          22      1
+5  3 1304095127 1304095146      2366          NA          NA     NA
+6  3 1304095276 1304095320      2192           5          28      1
+   timeRanges problem_id subject_id answer
+1        &lt;NA&gt;        156         29      B
+2 [1496,1909)         NA         NA   &lt;NA&gt;
+3        &lt;NA&gt;        269         25      C
+4 [1909,2306]         NA         NA   &lt;NA&gt;
+5        &lt;NA&gt;         34         22      C
+6 [1909,2306]         NA         NA   &lt;NA&gt;
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-18" style="background:;">
+  <hgroup>
+    <h2>Merging data - merge()</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">mergedData2 &lt;- merge(reviews,solutions,by.x=&quot;solution_id&quot;,by.y=&quot;id&quot;,all=TRUE)
+head(mergedData2[,1:6],3)
+</code></pre>
+
+<pre><code>  solution_id id reviewer_id    start.x     stop.x time_left.x
+1           1  4          26 1304095267 1304095423        2089
+2           2  6          29 1304095471 1304095513        1999
+3           3  1          27 1304095698 1304095758        1754
+</code></pre>
+
+<pre><code class="r">reviews[1,1:6]
+</code></pre>
+
+<pre><code>  id solution_id reviewer_id      start       stop time_left
+1  1           3          27 1304095698 1304095758      1754
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-19" style="background:;">
+  <hgroup>
+    <h2>Sorting values - sort()</h2>
+  </hgroup>
+  <article>
+    <ul>
+<li>Important parameters: <em>x</em>, <em>decreasing</em></li>
+</ul>
+
+<pre><code class="r">mergedData2$reviewer_id[1:10]
+</code></pre>
+
+<pre><code> [1] 26 29 27 22 28 22 29 23 25 29
+</code></pre>
+
+<pre><code class="r">sort(mergedData2$reviewer_id)[1:10]
+</code></pre>
+
+<pre><code> [1] 22 22 22 22 22 22 22 22 22 22
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-20" style="background:;">
+  <hgroup>
+    <h2>Ordering values - order()</h2>
+  </hgroup>
+  <article>
+    <ul>
+<li>Important parameters: <em>list of variables to order</em>, <em>na.last</em>,<em>decreasing</em></li>
+</ul>
+
+<pre><code class="r">mergedData2$reviewer_id[1:10]
+</code></pre>
+
+<pre><code> [1] 26 29 27 22 28 22 29 23 25 29
+</code></pre>
+
+<pre><code class="r">order(mergedData2$reviewer_id)[1:10]
+</code></pre>
+
+<pre><code> [1]  4  6 14 22 23 24 27 32 37 39
+</code></pre>
+
+<pre><code class="r">mergedData2$reviewer_id[order(mergedData2$reviewer_id)]
+</code></pre>
+
+<pre><code>  [1] 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22 22
+ [22] 22 22 22 22 22 22 22 22 23 23 23 23 23 23 23 23 23 23 23 23 23
+ [43] 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 23 24 24 24 24 24
+ [64] 24 24 24 24 24 24 24 24 24 24 25 25 25 25 25 25 25 25 25 25 25
+ [85] 25 25 25 25 25 25 25 25 25 25 25 26 26 26 26 26 26 26 26 26 26
+[106] 26 26 26 26 26 26 26 26 26 26 26 26 26 26 26 26 26 27 27 27 27
+[127] 27 27 27 27 27 27 27 27 27 27 27 27 27 27 27 27 27 27 27 27 27
+[148] 27 27 27 27 27 28 28 28 28 28 28 28 28 28 28 28 28 28 28 28 28
+[169] 28 28 28 28 28 28 28 28 28 28 29 29 29 29 29 29 29 29 29 29 29
+[190] 29 29 29 29 29 29 29 29 29 29 NA NA NA NA NA NA
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-21" style="background:;">
+  <hgroup>
+    <h2>Reordering a data frame</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">head(mergedData2[,1:6],3)
+</code></pre>
+
+<pre><code>  solution_id id reviewer_id    start.x     stop.x time_left.x
+1           1  4          26 1304095267 1304095423        2089
+2           2  6          29 1304095471 1304095513        1999
+3           3  1          27 1304095698 1304095758        1754
+</code></pre>
+
+<pre><code class="r">sortedData &lt;- mergedData2[order(mergedData2$reviewer_id),]
+head(sortedData[,1:6],3)
+</code></pre>
+
+<pre><code>   solution_id id reviewer_id    start.x     stop.x time_left.x
+4            4  2          22 1304095188 1304095206        2306
+6            6 16          22 1304095303 1304095471        2041
+14          14 12          22 1304095280 1304095301        2211
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-22" style="background:;">
+  <hgroup>
+    <h2>Reordering by multiple variables</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">head(mergedData2[,1:6],3)
+</code></pre>
+
+<pre><code>  solution_id id reviewer_id    start.x     stop.x time_left.x
+1           1  4          26 1304095267 1304095423        2089
+2           2  6          29 1304095471 1304095513        1999
+3           3  1          27 1304095698 1304095758        1754
+</code></pre>
+
+<pre><code class="r">sortedData &lt;- mergedData2[order(mergedData2$reviewer_id,mergedData2$id),]
+head(sortedData[,1:6],3)
+</code></pre>
+
+<pre><code>   solution_id id reviewer_id    start.x     stop.x time_left.x
+4            4  2          22 1304095188 1304095206        2306
+14          14 12          22 1304095280 1304095301        2211
+6            6 16          22 1304095303 1304095471        2041
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-23" style="background:;">
+  <hgroup>
+    <h2>Reshaping data - example</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">misShaped &lt;- as.data.frame(matrix(c(NA,5,1,4,2,3),byrow=TRUE,nrow=3))
+names(misShaped) &lt;- c(&quot;treatmentA&quot;,&quot;treatmentB&quot;)
+misShaped$people &lt;- c(&quot;John&quot;,&quot;Jane&quot;,&quot;Mary&quot;)
+misShaped
+</code></pre>
+
+<pre><code>  treatmentA treatmentB people
+1         NA          5   John
+2          1          4   Jane
+3          2          3   Mary
+</code></pre>
+
+<p><a href="http://vita.had.co.nz/papers/tidy-data.pdf">http://vita.had.co.nz/papers/tidy-data.pdf</a></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-24" style="background:;">
+  <hgroup>
+    <h2>Reshaping data - melt()</h2>
+  </hgroup>
+  <article>
+    <ul>
+<li>Important parameters: <em>id.vars</em>, <em>measure.vars</em>, <em>variable.name</em></li>
+</ul>
+
+<pre><code class="r">melt(misShaped,id.vars=&quot;people&quot;,variable.name=&quot;treatment&quot;,value.name=&quot;value&quot;)
+</code></pre>
+
+<pre><code>  people  treatment value
+1   John treatmentA    NA
+2   Jane treatmentA     1
+3   Mary treatmentA     2
+4   John treatmentB     5
+5   Jane treatmentB     4
+6   Mary treatmentB     3
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-25" style="background:;">
+  <hgroup>
+    <h2>More resources</h2>
+  </hgroup>
+  <article>
+    <ul>
+<li><a href="http://vita.had.co.nz/papers/tidy-data-pres.pdf">Tidy data and tidy tools</a></li>
+<li>Andrew Jaffe&#39;s <a href="https://dl.dropbox.com/u/7710864/courseraPublic/otherResources/lecture3/index.html">Data Cleaning Lecture</a></li>
+<li>Hadley Wickham on <a href="https://dl.dropbox.com/u/7710864/courseraPublic/otherResources/14-reg-exp.pdf">regular expressions</a></li>
+<li>Long, painful experience :-) </li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+
+  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+<!-- Grab CDN jQuery, fall back to local if offline -->
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+<script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery-1.7.min.js"><\/script>')</script>
+<!-- Load Javascripts for Widgets -->
+<!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script> -->
+<script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
+<!-- LOAD HIGHLIGHTER JS FILES -->
+<script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<!-- DONE LOADING HIGHLIGHTER JS FILES -->
+</html>

@@ -1,0 +1,220 @@
+---
+title       : Summarizing data
+subtitle    : 
+author      : Jeffrey Leek, Assistant Professor of Biostatistics 
+job         : Johns Hopkins Bloomberg School of Public Health
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : zenburn   # 
+widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+---
+
+```{r setup, cache = F, echo = F, message = F, warning = F, tidy = F}
+# make this an external chunk that can be included in any file
+options(width = 70)
+opts_chunk$set(message = F, warning = F, comment = NA, fig.align = 'center', dpi = 100, tidy = F, cache = T, cache.path = '.cache/', fig.path = 'fig/')
+
+options(xtable.type = 'html')
+knit_hooks$set(inline = function(x) {
+  if(is.numeric(x)) {
+    round(x, getOption('digits'))
+  } else {
+    paste(as.character(x), collapse = ', ')
+  }
+})
+knit_hooks$set(plot = knitr:::hook_plot_html)
+```
+
+## Why summarize?
+
+* Data are often too big to look at the whole thing
+* The first step in an analysis is to find problems
+* When you do these summaries you should be looking for
+  * Missing values
+  * Values outside of expected ranges
+  * Values that seem to be in the wrong units
+  * Mislabled variables/columns 
+  * Variables that are the wrong class
+
+---
+
+## Earthquake data
+
+<img class=center src=assets/img/earthquakes.png height='80%'/>
+
+[https://explore.data.gov/Geography-and-Environment/Worldwide-M1-Earthquakes-Past-7-Days/7tag-iwnu](https://explore.data.gov/Geography-and-Environment/Worldwide-M1-Earthquakes-Past-7-Days/7tag-iwnu)
+
+
+---
+
+## Earthquake data
+
+```{r cachedChunk,cache=TRUE}
+fileUrl <- "http://earthquake.usgs.gov/earthquakes/catalogs/eqs7day-M1.txt"
+download.file(fileUrl,destfile="./data/earthquakeData.csv",method="curl")
+dateDownloaded <- date()
+dateDownloaded
+eData <- read.csv("./data/earthquakeData.csv")
+```
+
+---
+
+## Looking at data - the whole thing
+```{r,dependson="cachedChunk"}
+eData
+```
+
+---
+
+## Looking at data - dim(),names(),nrow(),ncol()
+```{r, dependson="cachedChunk"}
+dim(eData)
+names(eData)
+nrow(eData)
+```
+
+---
+
+## Looking at the data - quantile(),summary()
+
+```{r, dependson="cachedChunk"}
+quantile(eData$Lat)
+summary(eData)
+```
+
+
+
+---
+
+## Looking at data - class()
+
+```{r, dependson="cachedChunk"}
+class(eData)
+sapply(eData[1,],class)
+```
+
+---
+
+## Looking at data - unique(),length(),table()
+
+```{r, dependson="cachedChunk"}
+unique(eData$Src)
+length(unique(eData$Src))
+table(eData$Src)
+```
+
+---
+
+## Looking at data - table()
+
+```{r, dependson="cachedChunk"}
+table(eData$Src,eData$Version)
+```
+
+
+---
+
+## Looking at data - any(), all()
+```{r, dependson="cachedChunk"}
+eData$Lat[1:10]
+eData$Lat[1:10] > 40
+any(eData$Lat[1:10] > 40)
+```
+
+---
+
+## Looking at data - all()
+```{r, dependson="cachedChunk"}
+
+eData$Lat[1:10] > 40
+all(eData$Lat[1:10] > 40)
+```
+
+
+
+---
+
+## Looking at subsets - &
+
+```{r, dependson="cachedChunk"}
+eData[eData$Lat > 0 & eData$Lon > 0,c("Lat","Lon")]
+
+```
+
+---
+
+## Looking at subsets - |
+
+```{r, dependson="cachedChunk"}
+eData[eData$Lat > 0 | eData$Lon > 0,c("Lat","Lon")]
+
+```
+
+
+---
+
+## Peer review experiment data
+
+* Data on submissions/reviews in an experiment 
+
+<img class=center src=assets/img/cooperation.png height='60%'/>
+
+[http://www.plosone.org/article/info:doi/10.1371/journal.pone.0026895](http://www.plosone.org/article/info:doi/10.1371/journal.pone.0026895)
+
+
+---
+
+## Peer review data
+
+
+```{r reviewDownload, cache=TRUE}
+fileUrl1 <- "https://dl.dropbox.com/u/7710864/data/reviews-apr29.csv"
+fileUrl2 <- "https://dl.dropbox.com/u/7710864/data/solutions-apr29.csv"
+download.file(fileUrl1,destfile="./data/reviews.csv",method="curl")
+download.file(fileUrl2,destfile="./data/solutions.csv",method="curl")
+reviews <- read.csv("./data/reviews.csv"); solutions <- read.csv("./data/solutions.csv")
+head(reviews,2)
+head(solutions,2)
+```
+
+---
+
+## Find if there are missing values - is.na()
+
+```{r, dependson="reviewDownload"}
+is.na(reviews$time_left[1:10])
+sum(is.na(reviews$time_left))
+table(is.na(reviews$time_left))
+```
+
+---
+
+## Important table()/NA issue
+
+```{r}
+table(c(0,1,2,3,NA,3,3,2,2,3))
+table(c(0,1,2,3,NA,3,3,2,2,3),useNA="ifany")
+```
+
+---
+
+## Summarizing columns/rows - rowSums(),rowMeans(),colSums(),colMeans()
+
+* Important parameters: _x_, _na.rm_
+```{r, dependson="reviewDownload"}
+colSums(reviews)
+```
+
+---
+
+## Summarizing columns/rows - rowSums(),rowMeans(),colSums(),colMeans()
+
+```{r, dependson="reviewDownload"}
+colMeans(reviews,na.rm=TRUE)
+rowMeans(reviews,na.rm=TRUE)
+```
+
+
+
+

@@ -1,0 +1,223 @@
+---
+title       : Getting Data (Part 2)
+subtitle    : 
+author      : Jeffrey Leek, Assistant Professor of Biostatistics 
+job         : Johns Hopkins Bloomberg School of Public Health
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : zenburn   # 
+widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+---
+
+```{r setup, cache = F, echo = F, message = F, warning = F, tidy = F}
+# make this an external chunk that can be included in any file
+options(width = 70)
+opts_chunk$set(message = F, warning = F, comment = NA, fig.align = 'center', dpi = 100, tidy = F, cache=F, cache.path = '.cache/', fig.path = 'fig/')
+
+options(xtable.type = 'html')
+knit_hooks$set(inline = function(x) {
+  if(is.numeric(x)) {
+    round(x, getOption('digits'))
+  } else {
+    paste(as.character(x), collapse = ', ')
+  }
+})
+knit_hooks$set(plot = knitr:::hook_plot_html)
+```
+
+
+## Interacting more directly with files
+
+* file - open a connection to a text file
+* url - open a connection to a url
+* gzfile - open a connection to a .gz file
+* bzfile - open a connection to a .bz2 file
+* _?connections_ for more information
+* <redtext>Remember to close connections </redtext>
+
+
+---
+
+## readLines() - local file
+
+* readLines - a function to read lines of text from a connection
+* Important parameters: _con_, _n_, _encoding_
+
+```{r cachedChunk, echo=FALSE}
+fileUrl <- "https://data.baltimorecity.gov/api/views/dz54-2aru/rows.csv?accessType=DOWNLOAD"
+download.file(fileUrl,destfile="./data/cameras.csv",method="curl")
+```
+
+
+```{r, dependson="cachedChunk"}
+con <- file("./data/cameras.csv","r")
+cameraData <- read.csv(con)
+close(con)
+head(cameraData)
+```
+
+
+---
+
+## readLines() - from the web
+
+
+```{r}
+
+con <- url("http://simplystatistics.org","r")
+simplyStats <- readLines(con)
+close(con)
+head(simplyStats)
+
+```
+
+---
+
+## Reading JSON files {RJSONIO}
+
+
+```{r}
+library(RJSONIO)
+fileUrl <- "https://data.baltimorecity.gov/api/views/dz54-2aru/rows.json?accessType=DOWNLOAD"
+download.file(fileUrl,destfile="./data/camera.json",method="curl")
+con = file("./data/camera.json")
+jsonCamera = fromJSON(con)
+close(con)
+head(jsonCamera)
+```
+
+
+---
+
+## Writing data - write.table()
+
+* The opposite of read.table
+* Important parameters: _x_, _file_, _quote_, _sep_, _row.names_, _col.names_
+
+```{r}
+cameraData <- read.csv("./data/cameras.csv")
+tmpData <- cameraData[,-1]
+write.table(tmpData,file="./data/camerasModified.csv",sep=",")
+cameraData2 <- read.csv("./data/camerasModified.csv")
+head(cameraData2)
+```
+
+
+--- 
+
+## Writing data - save(), save.image()
+
+
+* save is used to save R objects
+* Important parameters: _list of objects_, _file_
+* save.image saves everything in your working directory
+
+```{r}
+cameraData <- read.csv("./data/cameras.csv")
+tmpData <- cameraData[,-1]
+save(tmpData,cameraData,file="./data/cameras.rda")
+
+```
+
+
+---
+
+## Reading saved data - load()
+
+* Opposite of save()
+* Important parameters: _file_
+
+```{r}
+# Remove everything from the workspace
+rm(list=ls())
+ls()
+
+# Load data 
+load("./data/cameras.rda")
+ls()
+
+```
+
+
+---
+
+## paste() and paste0()
+
+* These functions are for pasting character strings together. 
+* Important parameters: _list of text strings_, _sep_
+* paste0() is the same as paste but with _sep=""_
+* Great for looping over files
+* See also [file.path](http://stat.ethz.ch/R-manual/R-patched/library/base/html/file.path.html)
+
+```{r}
+for(i in 1:5){
+  fileName = paste0("./data",i,".csv")
+  print(fileName)
+}
+```
+
+
+
+
+---
+
+## Getting data off webpages 
+
+<img class=center src=assets/img/googlescholar.png height='80%'/>
+
+[http://scholar.google.com/citations?user=HI-I6C0AAAAJ&hl=en](http://scholar.google.com/citations?user=HI-I6C0AAAAJ&hl=en)
+
+---
+
+## Getting data off webpages
+
+
+```{r}
+library(XML)
+con = url("http://scholar.google.com/citations?user=HI-I6C0AAAAJ&hl=en")
+htmlCode = readLines(con)
+close(con)
+htmlCode
+```
+
+
+
+---
+
+## Getting data off webpages
+
+```{r}
+html3 <- htmlTreeParse("http://scholar.google.com/citations?user=HI-I6C0AAAAJ&hl=en", useInternalNodes=T)
+xpathSApply(html3, "//title", xmlValue)
+xpathSApply(html3, "//td[@id='col-citedby']", xmlValue)
+```
+
+
+
+
+
+---
+
+## Further resources
+
+* Packages:
+  * [httr](http://cran.r-project.org/web/packages/httr/index.html) - for working with http connections 
+  * [RMySQL](http://cran.r-project.org/web/packages/RMySQL/index.html) - for interfacing with mySQL
+  * [bigmemory](http://www.bigmemory.org/) - for handling data larger than RAM
+  * [RHadoop](https://github.com/RevolutionAnalytics/RHadoop/wiki) - for interfacing R and Hadoop (by [Revolution Analytics](http://www.revolutionanalytics.com/))
+  * [foreign](http://cran.r-project.org/web/packages/foreign/index.html) - for getting data into R from SAS, SPSS, Octave, etc. 
+  
+* Reading/writing R videos [Part 1](http://www.youtube.com/watch?v=aBzAels6jPk&list=PLjTlxb-wKvXNSDfcKPFH2gzHGyjpeCZmJ&index=8), [Part 2](http://www.youtube.com/watch?v=cUUqDWttMws&list=PLjTlxb-wKvXNSDfcKPFH2gzHGyjpeCZmJ&index=9)
+
+
+
+
+
+
+
+
+
+
+
+

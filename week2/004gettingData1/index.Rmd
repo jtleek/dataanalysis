@@ -1,0 +1,223 @@
+---
+title       : Getting Data (Part 1)
+subtitle    : 
+author      : Jeffrey Leek, Assistant Professor of Biostatistics 
+job         : Johns Hopkins Bloomberg School of Public Health
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : zenburn   # 
+widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+---
+
+```{r setup, cache = F, echo = F, message = F, warning = F, tidy = F}
+# make this an external chunk that can be included in any file
+options(width = 70)
+opts_chunk$set(message = F, warning = F, comment = NA, fig.align = 'center', dpi = 100, tidy = F, cache=F, cache.path = '.cache/', fig.path = 'fig/')
+
+options(xtable.type = 'html')
+knit_hooks$set(inline = function(x) {
+  if(is.numeric(x)) {
+    round(x, getOption('digits'))
+  } else {
+    paste(as.character(x), collapse = ', ')
+  }
+})
+knit_hooks$set(plot = knitr:::hook_plot_html)
+```
+
+
+## Get/set your working directory
+
+Roger's lectures [windows](http://www.youtube.com/watch?v=XBcvH1BpIBo&list=PLjTlxb-wKvXNSDfcKPFH2gzHGyjpeCZmJ&index=2), [mac](http://www.youtube.com/watch?v=8xT3hmJQskU&list=PLjTlxb-wKvXNSDfcKPFH2gzHGyjpeCZmJ&index=1)
+Andrew Jaffe's [lecture notes](https://dl.dropbox.com/u/7710864/courseraPublic/otherResources/lecture1/index.html)
+
+```{r}
+getwd()
+setwd("/Users/jtleek/Dropbox/Jeff/teaching/2013/coursera/week2/004gettingData1/data")
+getwd()
+```
+
+Important difference with Windows: 
+
+```{r, eval=FALSE}
+ setwd("C:\\Users\\Andrew\\Downloads")
+```
+
+
+---
+
+## Get/set your working directory (relative paths)
+
+```{r}
+getwd()
+setwd("./data")
+getwd()
+setwd("../")
+getwd()
+```
+
+
+---
+
+## Get/set your working directory (relative paths)
+
+```{r}
+getwd()
+setwd("/Users/jtleek/Dropbox/Jeff/teaching/2013/coursera/week2/004gettingData1/data")
+getwd()
+```
+
+
+---
+
+## Types of files data may come from
+
+* Tab-delimited text
+* Comma-separated text
+* Excel file
+* JSON File 
+* HTML/XML file
+* Database
+
+
+---
+
+## Where you can get data
+
+* From a colleague
+* From the web
+* From an application programming interface
+* By scraping a web page 
+
+
+---
+
+## Getting data from the internet - download.file()
+
+* Downloads a file from the internet
+* Even if you could do this by hand, helps with reproducibility
+* Important parameters are _url_, _destfile_, _method_
+* Useful for downloading tab-delimited, csv, etc. 
+
+---
+
+## Example - Baltimore camera data
+
+<img class=center src=assets/img/cameras.png height='80%'/>
+
+[https://data.baltimorecity.gov/Transportation/Baltimore-Fixed-Speed-Cameras/dz54-2aru](https://data.baltimorecity.gov/Transportation/Baltimore-Fixed-Speed-Cameras/dz54-2aru)
+
+
+---
+
+## Example - Baltimore camera data,csv
+
+<img class=center src=assets/img/cameraslink.png height='80%'/>
+
+[https://data.baltimorecity.gov/Transportation/Baltimore-Fixed-Speed-Cameras/dz54-2aru](https://data.baltimorecity.gov/Transportation/Baltimore-Fixed-Speed-Cameras/dz54-2aru)
+
+
+---
+
+## Download a file from the web
+
+
+```{r}
+fileUrl <- "https://data.baltimorecity.gov/api/views/dz54-2aru/rows.csv?accessType=DOWNLOAD"
+download.file(fileUrl,destfile="./data/cameras.csv",method="curl")
+list.files("./data")
+dateDownloaded <- date()
+dateDownloaded
+```
+
+
+---
+
+## Some notes about download.file()
+
+* If the url starts with _http_ you can use download.file()
+* If the url starts with _https_ on Windows you may be ok
+* If the url starts with _https_ on Mac you may need to set _method="curl"_
+* If the file is big, this might take a while
+* Be sure to record when you downloaded. 
+
+---
+
+## Loading data you have saved - read.table()
+
+* This is the main function for reading data into R
+* Flexible and robust but requires more parameters
+* Reads the data into RAM - big data can cause problems
+* Important parameters _file_, _header_, _sep_, _row.names_, _nrows_
+* Related: _read.csv()_, _read.csv2()_
+
+---
+
+## Example: Baltimore camera data
+
+```{r}
+getwd()
+cameraData <- read.table("./data/cameras.csv")
+head(cameraData)
+
+```
+
+
+---
+
+## Example: Baltimore camera data
+
+```{r}
+getwd()
+cameraData <- read.table("./data/cameras.csv",sep=",",header=TRUE)
+head(cameraData)
+
+```
+
+
+---
+
+## Example: Baltimore camera data
+
+read.csv sets _sep=","_ and _header=TRUE_ 
+```{r}
+cameraData <- read.csv("./data/cameras.csv")
+head(cameraData)
+```
+
+
+
+---
+
+## read.xlsx(), read.xlsx2() {xlsx package}
+
+
+* Reads .xlsx files, but slow
+* Important parameters _file_, _sheetIndex_, _sheetIndex_, _rowIndex_, _colIndex_, _header_
+* read.xlsx2() relies more on low level Java functions so may be a bit faster
+
+
+---
+
+## read.xlsx() - Baltimore camera data
+
+```{r}
+library(xlsx)
+fileUrl <- "https://data.baltimorecity.gov/api/views/dz54-2aru/rows.xlsx?accessType=DOWNLOAD"
+download.file(fileUrl,destfile="./data/camera.xlsx",method="curl")
+cameraData <- read.xlsx2("./data/camera.xlsx",sheetIndex=1)
+head(cameraData)
+```
+
+
+---
+
+## Picking a file - less reproducible, but useful
+
+```{r,eval=FALSE}
+cameraData <- read.csv(file.choose())
+```
+
+<img class=center src=assets/img/filechoose.png height='80%'/>
+
