@@ -60,7 +60,7 @@ getwd()
 
 ---
 
-## Get/set your working directory (relative paths)
+## Get/set your working directory (absolute paths)
 
 ```{r}
 getwd()
