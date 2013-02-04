@@ -43,7 +43,7 @@ knit_hooks$set(plot = knitr:::hook_plot_html)
   * Garbage in -> garbage out
 * Distance or similarity
   * Continuous - euclidean distance
-  * Continous - correlation similarity
+  * Continuous - correlation similarity
   * Binary - manhattan distance
 * Pick a distance/similarity that makes sense for your problem
   
