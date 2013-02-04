@@ -69,7 +69,7 @@ Clustering organizes things that are __close__ into groups
   * Garbage in -> garbage out
 * Distance or similarity
   * Continuous - euclidean distance
-  * Continous - correlation similarity
+  * Continuous - correlation similarity
   * Binary - manhattan distance
 * Pick a distance/similarity that makes sense for your problem
   
