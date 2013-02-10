@@ -1,0 +1,205 @@
+---
+title       : Clustering example
+subtitle    : 
+author      : Jeffrey Leek, Assistant Professor of Biostatistics 
+job         : Johns Hopkins Bloomberg School of Public Health
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow   # 
+widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+---
+
+
+```{r setup, cache = F, echo = F, message = F, warning = F, tidy = F}
+# make this an external chunk that can be included in any file
+options(width = 100)
+opts_chunk$set(message = F, error = F, warning = F, comment = NA, fig.align = 'center', dpi = 100, tidy = F, cache = T, cache.path = '.cache/', fig.path = 'fig/')
+
+options(xtable.type = 'html')
+knit_hooks$set(inline = function(x) {
+  if(is.numeric(x)) {
+    round(x, getOption('digits'))
+  } else {
+    paste(as.character(x), collapse = ', ')
+  }
+})
+knit_hooks$set(plot = knitr:::hook_plot_html)
+```
+
+## Samsung Galaxy S3
+
+<img class=center src=assets/img/samsung.png height='80%'/>
+
+[http://www.samsung.com/global/galaxys3/](http://www.samsung.com/global/galaxys3/)
+
+
+---
+
+## Samsung Data
+
+<img class=center src=assets/img/ucisamsung.png height='60%'/>
+
+[http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones](http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones)
+
+
+---
+
+## Slightly processed data
+
+```{r loadData,cache=FALSE}
+download.file("https://dl.dropbox.com/u/7710864/courseraPublic/samsungData.rda"
+              ,destfile="./data/samsungData.rda",method="curl")
+load("./data/samsungData.rda")
+names(samsungData)[1:12]
+table(samsungData$activity)
+```
+
+---
+
+## Plotting average acceleration for first subject
+
+```{r processData,dependson="loadData",fig.height=4.5,fig.width=8}
+par(mfrow=c(1,2))
+numericActivity <- as.numeric(as.factor(samsungData$activity))[samsungData$subject==1]
+plot(samsungData[samsungData$subject==1,1],pch=19,col=numericActivity,ylab=names(samsungData)[1])
+plot(samsungData[samsungData$subject==1,2],pch=19,col=numericActivity,ylab=names(samsungData)[2])
+legend(150,-0.1,legend=unique(samsungData$activity),col=unique(numericActivity),pch=19)
+```
+
+---
+
+## Clustering based just on average acceleration
+
+
+```{r dependson="processData",fig.height=4,fig.width=4,cache=TRUE}
+source("http://dl.dropbox.com/u/7710864/courseraPublic/myplclust.R")
+distanceMatrix <- dist(samsungData[samsungData$subject==1,1:3])
+hclustering <- hclust(distanceMatrix)
+myplclust(hclustering,lab.col=numericActivity)
+```
+
+
+---
+
+## Plotting max acceleration for the first subject
+
+```{r ,dependson="processData",fig.height=4,fig.width=8}
+par(mfrow=c(1,2))
+plot(samsungData[samsungData$subject==1,10],pch=19,col=numericActivity,ylab=names(samsungData)[10])
+plot(samsungData[samsungData$subject==1,11],pch=19,col=numericActivity,ylab=names(samsungData)[11])
+```
+
+---
+
+## Clustering based on maximum acceleration
+
+```{r dependson="processData",fig.height=4,fig.width=4,cache=TRUE}
+source("http://dl.dropbox.com/u/7710864/courseraPublic/myplclust.R")
+distanceMatrix <- dist(samsungData[samsungData$subject==1,10:12])
+hclustering <- hclust(distanceMatrix)
+myplclust(hclustering,lab.col=numericActivity)
+```
+
+
+
+---
+
+## Singular value decomposition
+
+```{r svdChunk,dependson="processData",fig.height=4,fig.width=8,cache=TRUE}
+svd1 = svd(scale(samsungData[samsungData$subject==1,-c(562,563)]))
+par(mfrow=c(1,2))
+plot(svd1$u[,1],col=numericActivity,pch=19)
+plot(svd1$u[,2],col=numericActivity,pch=19)
+```
+
+---
+
+## Find maximum contributor
+
+```{r dependson="svdChunk",fig.height=4,fig.width=4,cache=TRUE}
+plot(svd1$v[,2],pch=19)
+
+```
+
+
+---
+
+##  New clustering with maximum contributer
+
+```{r dependson="svdChunk",fig.height=4.5,fig.width=4.5,cache=TRUE}
+maxContrib <- which.max(svd1$v[,2])
+distanceMatrix <- dist(samsungData[samsungData$subject==1,c(10:12,maxContrib)])
+hclustering <- hclust(distanceMatrix)
+myplclust(hclustering,lab.col=numericActivity)                             
+```
+
+
+---
+
+##  New clustering with maximum contributer
+
+```{r dependson="svdChunk",fig.height=4.5,fig.width=4.5,cache=TRUE}
+names(samsungData)[maxContrib]                          
+```
+
+---
+
+##  K-means clustering (nstart=1, first try)
+
+```{r kmeans1,dependson="processData",fig.height=4,fig.width=4}
+kClust <- kmeans(samsungData[samsungData$subject==1,-c(562,563)],centers=6)
+table(kClust$cluster,samsungData$activity[samsungData$subject==1])
+```
+
+
+
+---
+
+##  K-means clustering (nstart=1, second try)
+
+```{r dependson="kmeans1",fig.height=4,fig.width=4,cache=TRUE}
+kClust <- kmeans(samsungData[samsungData$subject==1,-c(562,563)],centers=6,nstart=1)
+table(kClust$cluster,samsungData$activity[samsungData$subject==1])
+```
+
+
+---
+
+##  K-means clustering (nstart=100, first try)
+
+```{r dependson="kmeans1",fig.height=4,fig.width=4,cache=TRUE}
+kClust <- kmeans(samsungData[samsungData$subject==1,-c(562,563)],centers=6,nstart=100)
+table(kClust$cluster,samsungData$activity[samsungData$subject==1])
+```
+
+
+
+---
+
+##  K-means clustering (nstart=100, second try)
+
+```{r kmeans100,dependson="kmeans1",fig.height=4,fig.width=4,cache=TRUE}
+kClust <- kmeans(samsungData[samsungData$subject==1,-c(562,563)],centers=6,nstart=100)
+table(kClust$cluster,samsungData$activity[samsungData$subject==1])
+```
+
+---
+
+##  Cluster 1 Variable Centers (Laying)
+
+```{r dependson="kmeans100",fig.height=4,fig.width=8,cache=FALSE}
+plot(kClust$center[1,1:10],pch=19,ylab="Cluster Center",xlab="")
+```
+
+
+---
+
+##  Cluster 2 Variable Centers (Walking)
+
+```{r dependson="kmeans100",fig.height=4,fig.width=8,cache=FALSE}
+plot(kClust$center[6,1:10],pch=19,ylab="Cluster Center",xlab="")
+```
+
+
