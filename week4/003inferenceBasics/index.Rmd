@@ -137,12 +137,12 @@ hist(sapply(sampleLm,function(x){coef(x)[2]}),col="blue",xlab="Slope",main="")
 From the [central limit theorem](https://www.khanacademy.org/math/probability/statistics-inferential/sampling_distribution/v/central-limit-theorem) it turns out that in many cases:
 
 $$\hat{b}_0 \sim N(b_0, Var(\hat{b}_0))$$
-$$\hat{b}_1 \sim N(b_0, Var(\hat{b}_1))$$
+$$\hat{b}_1 \sim N(b_1, Var(\hat{b}_1))$$
 
 which we can estimate with:
 
 $$\hat{b}_0 \approx N(b_0, \hat{Var}(\hat{b}_0))$$
-$$\hat{b}_1 \approx N(b_0, \hat{Var}(\hat{b}_1))$$
+$$\hat{b}_1 \approx N(b_1, \hat{Var}(\hat{b}_1))$$
 
 $\sqrt{\hat{Var}(\hat{b}_0)}$ is the "standard error" of the estimate $\hat{b}_0$ and is abbreviated $S.E.(\hat{b}_0)$
 
@@ -197,7 +197,7 @@ hist(sapply(sampleLm,function(x){coef(x)[2]}),col="blue",xlab="Slope",main="")
 ## Standardized coefficients
 
 $$\hat{b}_0 \approx N(b_0, \hat{Var}(\hat{b}_0))$$
-$$\hat{b}_1 \approx N(b_0, \hat{Var}(\hat{b}_1))$$
+$$\hat{b}_1 \approx N(b_1, \hat{Var}(\hat{b}_1))$$
 
 and
 
@@ -233,7 +233,7 @@ A confidence interval will include the real parameter $\alpha$ percent of the ti
 
 ## Confidence intervals
 
-$$(\hat{b}_1 + T_{\alpha/2}\times S.E.(\hat{b}_1),\hat{b}_1 - T_{\alpha/2} \times S.E.(\hat{b}_1))$$
+$$(\hat{b}_1 - T_{\alpha/2}\times S.E.(\hat{b}_1),\hat{b}_1 + T_{\alpha/2} \times S.E.(\hat{b}_1))$$
 
 ```{r,dependson="sampleReg"}
 summary(sampleLm4)$coeff
