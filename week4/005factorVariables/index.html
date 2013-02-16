@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Regression with factor variables</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Regression with factor variables">
+  <meta name="author" content="Jeffrey Leek, Assistant Professor of Biostatistics">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+    <link rel="stylesheet" href = "assets/css/custom.css">
+<link rel="stylesheet" href = "assets/css/ribbons.css">
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+    <!-- END LOGO SLIDE -->
+    
+
+    <!-- TITLE SLIDE -->
+    <!-- Should I move this to a Local Layout File? -->
+    <slide class="title-slide segue nobackground">
+      <hgroup class="auto-fadein">
+        <h1>Regression with factor variables</h1>
+        <h2></h2>
+        <p>Jeffrey Leek, Assistant Professor of Biostatistics<br/>Johns Hopkins Bloomberg School of Public Health</p>
+      </hgroup>
+          </slide>
+
+    <!-- SLIDES -->
+      <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h2>Key ideas</h2>
+  </hgroup>
+  <article>
+    <ul>
+<li>Outcome is still quantitative</li>
+<li>Covariate(s) are factor variables</li>
+<li>Fitting lines = fitting means</li>
+<li>Want to evaluate contribution of all factor levels at once</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-2" style="background:;">
+  <hgroup>
+    <h2>Example: Movie ratings</h2>
+  </hgroup>
+  <article>
+    <p><img class=center src=assets/img/rotten.png height='80%'/></p>
+
+<p><a href="http://www.rottentomatoes.com/">http://www.rottentomatoes.com/</a></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h2>Movie Data</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">download.file(&quot;http://www.rossmanchance.com/iscam2/data/movies03RT.txt&quot;,destfile=&quot;./data/movies.txt&quot;)
+movies &lt;- read.table(&quot;./data/movies.txt&quot;,sep=&quot;\t&quot;,header=T,quote=&quot;&quot;)
+head(movies)
+</code></pre>
+
+<pre><code>                 X score rating            genre box.office running.time
+1 2 Fast 2 Furious  48.9  PG-13 action/adventure     127.15          107
+2    28 Days Later  78.2      R           horror      45.06          113
+3      A Guy Thing  39.5  PG-13       rom comedy      15.54          101
+4      A Man Apart  42.9      R action/adventure      26.25          110
+5    A Mighty Wind  79.9  PG-13           comedy      17.78           91
+6 Agent Cody Banks  57.9     PG action/adventure      47.81          102
+</code></pre>
+
+<p><a href="http://www.rossmanchance.com/">http://www.rossmanchance.com/</a></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>Rotton tomatoes score vs. rating</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">plot(movies$score ~ jitter(as.numeric(movies$rating)),col=&quot;blue&quot;,xaxt=&quot;n&quot;,pch=19)
+axis(side=1,at=unique(as.numeric(movies$rating)),labels=unique(movies$rating))
+</code></pre>
+
+<div class="rimage center"><img src="fig/unnamed-chunk-1.png"  class="plot" /></div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-5" style="background:;">
+  <hgroup>
+    <h2>Average score by rating</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">plot(movies$score ~ jitter(as.numeric(movies$rating)),col=&quot;blue&quot;,xaxt=&quot;n&quot;,pch=19)
+axis(side=1,at=unique(as.numeric(movies$rating)),labels=unique(movies$rating))
+meanRatings &lt;- tapply(movies$score,movies$rating,mean)
+points(1:4,meanRatings,col=&quot;red&quot;,pch=&quot;-&quot;,cex=5)
+</code></pre>
+
+<div class="rimage center"><img src="fig/unnamed-chunk-2.png"  class="plot" /></div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-6" style="background:;">
+  <hgroup>
+    <h2>Another way to write it down</h2>
+  </hgroup>
+  <article>
+    <p><br><br></p>
+
+<p>\[S_i = b_0 + b_1 \mathbb{1}(Ra_i="PG") + b_2 \mathbb{1}(Ra_i="PG-13") + b_3 \mathbb{1}(Ra_i="R") + e_i \]</p>
+
+<p><br><br></p>
+
+<p>The notation \(\mathbb{1}(Ra_i="PG")\) is a logical value that is one if the movie rating is &quot;PG&quot; and zero otherwise.</p>
+
+<p><strong>Average values</strong></p>
+
+<p>\(b_0\) = average of the G movies</p>
+
+<p>\(b_0 + b_1\) = average of the PG movies</p>
+
+<p>\(b_0 + b_2\) = average of the PG-13 movies</p>
+
+<p>\(b_0 + b_3\) = average of the R movies</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-7" style="background:;">
+  <hgroup>
+    <h2>Here is how you do it in R</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">lm1 &lt;- lm(movies$score ~ as.factor(movies$rating))
+summary(lm1)
+</code></pre>
+
+<pre><code>
+Call:
+lm(formula = movies$score ~ as.factor(movies$rating))
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-26.43  -9.98  -0.98   9.34  38.97 
+
+Coefficients:
+                              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)                      67.65       7.19    9.40   &lt;2e-16 ***
+as.factor(movies$rating)PG      -12.59       7.85   -1.60     0.11    
+as.factor(movies$rating)PG-13   -11.81       7.41   -1.59     0.11    
+as.factor(movies$rating)R       -12.02       7.48   -1.61     0.11    
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1 
+
+Residual standard error: 14.4 on 136 degrees of freedom
+Multiple R-squared: 0.0199, Adjusted R-squared: -0.00177 
+F-statistic: 0.918 on 3 and 136 DF,  p-value: 0.434 
+
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-8" style="background:;">
+  <hgroup>
+    <h2>Plot fitted values</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">plot(movies$score ~ jitter(as.numeric(movies$rating)),col=&quot;blue&quot;,xaxt=&quot;n&quot;,pch=19)
+axis(side=1,at=unique(as.numeric(movies$rating)),labels=unique(movies$rating))
+points(1:4,lm1$coeff[1] + c(0,lm1$coeff[2:4]),col=&quot;red&quot;,pch=&quot;-&quot;,cex=5)
+</code></pre>
+
+<div class="rimage center"><img src="fig/unnamed-chunk-3.png"  class="plot" /></div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-9" style="background:;">
+  <hgroup>
+    <h2>Question 1</h2>
+  </hgroup>
+  <article>
+    <p><strong>Average values</strong></p>
+
+<p>\(b_0\) = average of the G movies</p>
+
+<p>\(b_0 + b_1\) = average of the PG movies</p>
+
+<p>\(b_0 + b_2\) = average of the PG-13 movies</p>
+
+<p>\(b_0 + b_3\) = average of the R movies</p>
+
+<p><strong>What is the average difference in rating between G and R movies?</strong></p>
+
+<p>\(b_0 + b_3 - b_0\) = \(b_3\)</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-10" style="background:;">
+  <hgroup>
+    <h2>Question 1 in R</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">lm1 &lt;- lm(movies$score ~ as.factor(movies$rating))
+summary(lm1)
+</code></pre>
+
+<pre><code>
+Call:
+lm(formula = movies$score ~ as.factor(movies$rating))
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-26.43  -9.98  -0.98   9.34  38.97 
+
+Coefficients:
+                              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)                      67.65       7.19    9.40   &lt;2e-16 ***
+as.factor(movies$rating)PG      -12.59       7.85   -1.60     0.11    
+as.factor(movies$rating)PG-13   -11.81       7.41   -1.59     0.11    
+as.factor(movies$rating)R       -12.02       7.48   -1.61     0.11    
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1 
+
+Residual standard error: 14.4 on 136 degrees of freedom
+Multiple R-squared: 0.0199, Adjusted R-squared: -0.00177 
+F-statistic: 0.918 on 3 and 136 DF,  p-value: 0.434 
+
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-11" style="background:;">
+  <hgroup>
+    <h2>Question 1 in R</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">lm1 &lt;- lm(movies$score ~ as.factor(movies$rating))
+confint(lm1)
+</code></pre>
+
+<pre><code>                               2.5 % 97.5 %
+(Intercept)                    53.42 81.875
+as.factor(movies$rating)PG    -28.11  2.928
+as.factor(movies$rating)PG-13 -26.47  2.842
+as.factor(movies$rating)R     -26.80  2.763
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-12" style="background:;">
+  <hgroup>
+    <h2>Question 2</h2>
+  </hgroup>
+  <article>
+    <p><strong>Average values</strong></p>
+
+<p>\(b_0\) = average of the G movies</p>
+
+<p>\(b_0 + b_1\) = average of the PG movies</p>
+
+<p>\(b_0 + b_2\) = average of the PG-13 movies</p>
+
+<p>\(b_0 + b_3\) = average of the R movies</p>
+
+<p><strong>What is the average difference in rating between \(PG-13\) and \(R\) movies?</strong></p>
+
+<p>\(b_0 + b_2 - (b_0 + b_3)\) = \(b_2-b_3\)</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-13" style="background:;">
+  <hgroup>
+    <h2>We could rewrite our model</h2>
+  </hgroup>
+  <article>
+    <p>\[S_i = b_0 + b_1 \mathbb{1}(Ra_i="G") + b_2 \mathbb{1}(Ra_i="PG") + b_3 \mathbb{1}(Ra_i="PG-13") + e_i \]</p>
+
+<p><br><br></p>
+
+<p><strong>Average values</strong></p>
+
+<p>\(b_0\) = average of the R movies</p>
+
+<p>\(b_0 + b_1\) = average of the G movies</p>
+
+<p>\(b_0 + b_2\) = average of the PG movies</p>
+
+<p>\(b_0 + b_3\) = average of the PG-13 movies</p>
+
+<p><strong>What is the average difference in rating between \(PG-13\) and \(R\) movies?</strong></p>
+
+<p>\(b_0 + b_3 - b_0\) = \(b_3\)</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-14" style="background:;">
+  <hgroup>
+    <h2>Question 2 in R</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">lm2 &lt;- lm(movies$score ~ relevel(movies$rating,ref=&quot;R&quot;))
+summary(lm2)
+</code></pre>
+
+<pre><code>
+Call:
+lm(formula = movies$score ~ relevel(movies$rating, ref = &quot;R&quot;))
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-26.43  -9.98  -0.98   9.34  38.97 
+
+Coefficients:
+                                       Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)                              55.630      2.035   27.34   &lt;2e-16 ***
+relevel(movies$rating, ref = &quot;R&quot;)G       12.020      7.476    1.61     0.11    
+relevel(movies$rating, ref = &quot;R&quot;)PG      -0.573      3.741   -0.15     0.88    
+relevel(movies$rating, ref = &quot;R&quot;)PG-13    0.205      2.706    0.08     0.94    
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1 
+
+Residual standard error: 14.4 on 136 degrees of freedom
+Multiple R-squared: 0.0199, Adjusted R-squared: -0.00177 
+F-statistic: 0.918 on 3 and 136 DF,  p-value: 0.434 
+
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-15" style="background:;">
+  <hgroup>
+    <h2>Question 2 in R</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">lm2 &lt;- lm(movies$score ~ relevel(movies$rating,ref=&quot;R&quot;))
+confint(lm2)
+</code></pre>
+
+<pre><code>                                        2.5 % 97.5 %
+(Intercept)                            51.606 59.654
+relevel(movies$rating, ref = &quot;R&quot;)G     -2.763 26.803
+relevel(movies$rating, ref = &quot;R&quot;)PG    -7.971  6.825
+relevel(movies$rating, ref = &quot;R&quot;)PG-13 -5.146  5.557
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-16" style="background:;">
+  <hgroup>
+    <h2>Question 3</h2>
+  </hgroup>
+  <article>
+    <p><br><br></p>
+
+<p>\[S_i = b_0 + b_1 \mathbb{1}(Ra_i="PG") + b_2 \mathbb{1}(Ra_i="PG-13") + b_3 \mathbb{1}(Ra_i="R") + e_i \]</p>
+
+<p><br><br></p>
+
+<p><strong>Average values</strong></p>
+
+<p>\(b_0\) = average of the G movies</p>
+
+<p>\(b_0 + b_1\) = average of the PG movies</p>
+
+<p>\(b_0 + b_2\) = average of the PG-13 movies</p>
+
+<p>\(b_0 + b_3\) = average of the R movies</p>
+
+<p><strong>Is there any difference in score between any of the movie ratings?</strong></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-17" style="background:;">
+  <hgroup>
+    <h2>Question 3 in R</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">lm1 &lt;- lm(movies$score ~ as.factor(movies$rating))
+anova(lm1)
+</code></pre>
+
+<pre><code>Analysis of Variance Table
+
+Response: movies$score
+                          Df Sum Sq Mean Sq F value Pr(&gt;F)
+as.factor(movies$rating)   3    570     190    0.92   0.43
+Residuals                136  28149     207               
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-18" style="background:;">
+  <hgroup>
+    <h2>Sum of squares (G movies)</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">gMovies &lt;- movies[movies$rating==&quot;G&quot;,]; xVals &lt;- seq(0.2,0.8,length=4)
+plot(xVals,gMovies$score,ylab=&quot;Score&quot;,xaxt=&quot;n&quot;,xlim=c(0,1),pch=19)
+abline(h=mean(gMovies$score),col=&quot;blue&quot;,lwd=3); abline(h=mean(movies$score),col=&quot;red&quot;,lwd=3)
+segments(xVals+0.01,rep(mean(gMovies$score),length(xVals)),xVals+0.01,
+         rep(mean(movies$score),length(xVals)),col=&quot;red&quot;,lwd=2)
+segments(xVals-0.01,gMovies$score,xVals-0.01,rep(mean(gMovies$score),length(xVals)),col=&quot;blue&quot;,lwd=2)
+</code></pre>
+
+<div class="rimage center"><img src="fig/unnamed-chunk-9.png"  class="plot" /></div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-19" style="background:;">
+  <hgroup>
+    <h2>Tukey&#39;s (honestly significant difference test)</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">lm1 &lt;- aov(movies$score ~ as.factor(movies$rating))
+TukeyHSD(lm1)
+</code></pre>
+
+<pre><code>  Tukey multiple comparisons of means
+    95% family-wise confidence level
+
+Fit: aov(formula = movies$score ~ as.factor(movies$rating))
+
+$`as.factor(movies$rating)`
+             diff     lwr    upr  p adj
+PG-G     -12.5929 -33.008  7.822 0.3795
+PG-13-G  -11.8146 -31.092  7.463 0.3854
+R-G      -12.0200 -31.464  7.424 0.3776
+PG-13-PG   0.7782  -8.615 10.171 0.9964
+R-PG       0.5729  -9.158 10.304 0.9987
+R-PG-13   -0.2054  -7.245  6.834 0.9998
+
+</code></pre>
+
+<p><a href="http://en.wikipedia.org/wiki/Tukey&#x27;s_range_test">http://en.wikipedia.org/wiki/Tukey&#39;s_range_test</a></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+
+  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+<!-- Grab CDN jQuery, fall back to local if offline -->
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+<script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery-1.7.min.js"><\/script>')</script>
+<!-- Load Javascripts for Widgets -->
+<!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script> -->
+<script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
+<!-- LOAD HIGHLIGHTER JS FILES -->
+<script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<!-- DONE LOADING HIGHLIGHTER JS FILES -->
+</html>
