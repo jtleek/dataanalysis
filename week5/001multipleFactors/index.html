@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ANOVA with multiple factors/variables</title>
+  <meta charset="utf-8">
+  <meta name="description" content="ANOVA with multiple factors/variables">
+  <meta name="author" content="Jeffrey Leek, Assistant Professor of Biostatistics">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+    <link rel="stylesheet" href = "assets/css/custom.css">
+<link rel="stylesheet" href = "assets/css/ribbons.css">
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+    <!-- END LOGO SLIDE -->
+    
+
+    <!-- TITLE SLIDE -->
+    <!-- Should I move this to a Local Layout File? -->
+    <slide class="title-slide segue nobackground">
+      <hgroup class="auto-fadein">
+        <h1>ANOVA with multiple factors/variables</h1>
+        <h2></h2>
+        <p>Jeffrey Leek, Assistant Professor of Biostatistics<br/>Johns Hopkins Bloomberg School of Public Health</p>
+      </hgroup>
+          </slide>
+
+    <!-- SLIDES -->
+      <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h2>Key ideas</h2>
+  </hgroup>
+  <article>
+    <ul>
+<li>Outcome is still quantitative</li>
+<li>You have multiple explanatory variables</li>
+<li>Goal is to identify contributions of different variables</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-2" style="background:;">
+  <hgroup>
+    <h2>A successful example</h2>
+  </hgroup>
+  <article>
+    <p><img class=center src=assets/img/wired.png height='40%'/></p>
+
+<p>&quot;For the button, an A/B test of three new word choices—”Learn More,” “Join Us Now,” and “Sign Up Now”—revealed that “Learn More” garnered 18.6 percent more signups per visitor than the default of “Sign Up.” Similarly, a black-and-white photo of the Obama family outperformed the default turquoise image by 13.1 percent. Using both the family image and “Learn More,” signups increased by a thundering 40 percent.&quot;</p>
+
+<p><a href="http://www.wired.com/business/2012/04/ff_abtesting/">http://www.wired.com/business/2012/04/ff_abtesting/</a></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h2>Movie Data</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">download.file(&quot;http://www.rossmanchance.com/iscam2/data/movies03RT.txt&quot;,
+              destfile=&quot;./data/movies.txt&quot;)
+movies &lt;- read.table(&quot;./data/movies.txt&quot;,sep=&quot;\t&quot;,header=T,quote=&quot;&quot;)
+head(movies)
+</code></pre>
+
+<pre><code>                 X score rating            genre box.office running.time
+1 2 Fast 2 Furious  48.9  PG-13 action/adventure     127.15          107
+2    28 Days Later  78.2      R           horror      45.06          113
+3      A Guy Thing  39.5  PG-13       rom comedy      15.54          101
+4      A Man Apart  42.9      R action/adventure      26.25          110
+5    A Mighty Wind  79.9  PG-13           comedy      17.78           91
+6 Agent Cody Banks  57.9     PG action/adventure      47.81          102
+</code></pre>
+
+<p><a href="http://www.rossmanchance.com/">http://www.rossmanchance.com/</a></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>Relating score to rating</h2>
+  </hgroup>
+  <article>
+    <p><br><br></p>
+
+<p>\[S_i = b_0 + b_1 \mathbb{1}(Ra_i="PG") + b_2 \mathbb{1}(Ra_i="PG-13") + b_3 \mathbb{1}(Ra_i="R") + e_i \]</p>
+
+<p><br><br></p>
+
+<p>The notation \(\mathbb{1}(Ra_i="PG")\) is a logical value that is one if the movie rating is &quot;PG&quot; and zero otherwise.</p>
+
+<p><strong>Average values</strong></p>
+
+<p>\(b_0\) = average of the G movies</p>
+
+<p>\(b_0 + b_1\) = average of the PG movies</p>
+
+<p>\(b_0 + b_2\) = average of the PG-13 movies</p>
+
+<p>\(b_0 + b_3\) = average of the R movies</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-5" style="background:;">
+  <hgroup>
+    <h2>ANOVA in R</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">aovObject &lt;- aov(movies$score ~ movies$rating)
+aovObject
+</code></pre>
+
+<pre><code>Call:
+   aov(formula = movies$score ~ movies$rating)
+
+Terms:
+                movies$rating Residuals
+Sum of Squares            570     28149
+Deg. of Freedom             3       136
+
+Residual standard error: 14.39 
+Estimated effects may be unbalanced
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-6" style="background:;">
+  <hgroup>
+    <h2>ANOVA in R</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">aovObject$coeff
+</code></pre>
+
+<pre><code>       (Intercept)    movies$ratingPG movies$ratingPG-13     movies$ratingR 
+             67.65             -12.59             -11.81             -12.02 
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-7" style="background:;">
+  <hgroup>
+    <h2>Adding a second factor</h2>
+  </hgroup>
+  <article>
+    <p><br><br></p>
+
+<p>\[S_i = b_0 + b_1 \mathbb{1}(Ra_i="PG") + b_2 \mathbb{1}(Ra_i="PG-13") + b_3 \mathbb{1}(Ra_i="R")\]
+\[+ \gamma_1 \mathbb{1}(G_i="action") +  \gamma_2 \mathbb{1}(G_i="animated") + ... + e_i\]</p>
+
+<p><br><br></p>
+
+<p>The notation \(\mathbb{1}(Ra_i="PG")\) is a logical value that is one if the movie rating is &quot;PG&quot; and zero otherwise. </p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-8" style="background:;">
+  <hgroup>
+    <h2>Adding a second factor</h2>
+  </hgroup>
+  <article>
+    <p><br><br></p>
+
+<p>\[S_i = b_0 + \underbrace{b_1 \mathbb{1}(Ra_i="PG") + b_2 \mathbb{1}(Ra_i="PG-13") + b_3 \mathbb{1}(Ra_i="R")}_{rating}\]
+\[+ \gamma_1 \underbrace{\mathbb{1}(G_i="action")  + \gamma_2 \mathbb{1}(G_i="animated") + ...}_{genre} + e_i \]</p>
+
+<p><br><br></p>
+
+<p>There are only 2 variables in this model. They have multiple levels. </p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-9" style="background:;">
+  <hgroup>
+    <h2>Second variable</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">aovObject2 &lt;- aov(movies$score ~ movies$rating + movies$genre)
+aovObject2
+</code></pre>
+
+<pre><code>Call:
+   aov(formula = movies$score ~ movies$rating + movies$genre)
+
+Terms:
+                movies$rating movies$genre Residuals
+Sum of Squares            570         3935     24214
+Deg. of Freedom             3           12       124
+
+Residual standard error: 13.97 
+Estimated effects may be unbalanced
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-10" style="background:;">
+  <hgroup>
+    <h2>ANOVA Summary</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">summary(aovObject2)
+</code></pre>
+
+<pre><code>               Df Sum Sq Mean Sq F value Pr(&gt;F)  
+movies$rating   3    570     190    0.97  0.408  
+movies$genre   12   3935     328    1.68  0.079 .
+Residuals     124  24214     195                 
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1 
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-11" style="background:;">
+  <hgroup>
+    <h2>Order matters</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">aovObject3 &lt;- aov(movies$score ~ movies$genre + movies$rating)
+summary(aovObject3)
+</code></pre>
+
+<pre><code>               Df Sum Sq Mean Sq F value Pr(&gt;F)  
+movies$genre   12   4222     352    1.80  0.055 .
+movies$rating   3    284      95    0.48  0.694  
+Residuals     124  24214     195                 
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1 
+</code></pre>
+
+<pre><code class="r">summary(aovObject2)
+</code></pre>
+
+<pre><code>               Df Sum Sq Mean Sq F value Pr(&gt;F)  
+movies$rating   3    570     190    0.97  0.408  
+movies$genre   12   3935     328    1.68  0.079 .
+Residuals     124  24214     195                 
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1 
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-12" style="background:;">
+  <hgroup>
+    <h2>Adding a quantitative variable</h2>
+  </hgroup>
+  <article>
+    <p><br><br></p>
+
+<p>\[S_i = b_0 + \underbrace{b_1 \mathbb{1}(Ra_i="PG") + b_2 \mathbb{1}(Ra_i="PG-13") + b_3 \mathbb{1}(Ra_i="R")}_{rating}\]
+\[+ \gamma_1 \underbrace{\mathbb{1}(G_i="action")  + \gamma_2 \mathbb{1}(G_i="animated") + ...}_{genre} + \eta_1 \underbrace{BO_i}_{box\; office} + e_i \]</p>
+
+<p><br><br></p>
+
+<p>There are three variables in this model - box office is quantitative so only has one term. </p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-13" style="background:;">
+  <hgroup>
+    <h2>ANOVA with quantitative variable in R</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">aovObject4 &lt;- aov(movies$score ~ movies$genre + movies$rating + movies$box.office)
+summary(aovObject4)
+</code></pre>
+
+<pre><code>                   Df Sum Sq Mean Sq F value  Pr(&gt;F)    
+movies$genre       12   4222     352    2.19   0.016 *  
+movies$rating       3    284      95    0.59   0.624    
+movies$box.office   1   4421    4421   27.47 6.7e-07 ***
+Residuals         123  19793     161                    
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1 
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-14" style="background:;">
+  <hgroup>
+    <h2>Language and further resources</h2>
+  </hgroup>
+  <article>
+    <ul>
+<li>Units - one observation</li>
+<li>Treatments - applied to units</li>
+<li>Factors - controlled by experimenters</li>
+<li><p>Replicates - multiple (independent) units with the same factors/treatments</p></li>
+<li><p><a href="http://en.wikipedia.org/wiki/Design_of_experiments">Wikipedia on Experimental Design</a></p></li>
+<li><p><a href="http://en.wikipedia.org/wiki/Analysis_of_variance">Wikipedia on ANOVA</a></p></li>
+<li><p><a href="http://en.wikipedia.org/wiki/A/B_testing">Wikipedia on A/B Testing</a></p></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+
+  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+<!-- Grab CDN jQuery, fall back to local if offline -->
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+<script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery-1.7.min.js"><\/script>')</script>
+<!-- Load Javascripts for Widgets -->
+<!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script> -->
+<script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
+<!-- LOAD HIGHLIGHTER JS FILES -->
+<script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<!-- DONE LOADING HIGHLIGHTER JS FILES -->
+</html>
