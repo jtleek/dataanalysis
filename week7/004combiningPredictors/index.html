@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Combining predictors</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Combining predictors">
+  <meta name="author" content="Jeffrey Leek, Assistant Professor of Biostatistics">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+    <link rel="stylesheet" href = "assets/css/custom.css">
+<link rel="stylesheet" href = "assets/css/ribbons.css">
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+    <!-- END LOGO SLIDE -->
+    
+
+    <!-- TITLE SLIDE -->
+    <!-- Should I move this to a Local Layout File? -->
+    <slide class="title-slide segue nobackground">
+      <hgroup class="auto-fadein">
+        <h1>Combining predictors</h1>
+        <h2></h2>
+        <p>Jeffrey Leek, Assistant Professor of Biostatistics<br/>Johns Hopkins Bloomberg School of Public Health</p>
+      </hgroup>
+          </slide>
+
+    <!-- SLIDES -->
+      <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h2>Key ideas</h2>
+  </hgroup>
+  <article>
+    <ul>
+<li>You can combine classifiers by averaging/voting</li>
+<li>Combining classifiers improves accuracy</li>
+<li>Combining classifiers reduces interpretability</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-2" style="background:;">
+  <hgroup>
+    <h2>Netflix prize</h2>
+  </hgroup>
+  <article>
+    <p>BellKor = Combination of 107 predictors </p>
+
+<p><img class=center src=assets/img/netflix.png height='70%'/></p>
+
+<p><a href="http://www.netflixprize.com//leaderboard">http://www.netflixprize.com//leaderboard</a></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h2>Heritage health prize - Progress Prize 1</h2>
+  </hgroup>
+  <article>
+    <p><img class=center src=assets/img/makers.png height='40%'/>
+<a href="https://kaggle2.blob.core.windows.net/wiki-files/327/e4cd1d25-eca9-49ca-9593-b254a773fe03/Market%20Makers%20-%20Milestone%201%20Description%20V2%201.pdf">Market Makers</a></p>
+
+<p><img class=center src=assets/img/mestrom.png height='40%'/>
+<a href="https://kaggle2.blob.core.windows.net/wiki-files/327/09ccf652-8c1c-4a3d-b979-ce2369c985e4/Willem%20Mestrom%20-%20Milestone%201%20Description%20V2%202.pdf">Mestrom</a></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>Basic intuition - majority vote</h2>
+  </hgroup>
+  <article>
+    <p>Suppose we have 5 completely independent classifiers</p>
+
+<p>If accuracy is 70% for each:</p>
+
+<ul>
+<li>\(10\times(0.7)^3(0.3)^2 + 5\times(0.7)^4(0.3)^2 + (0.7)^5\)</li>
+<li>83.7% majority vote accuracy</li>
+</ul>
+
+<p>With 101 independent classifiers</p>
+
+<ul>
+<li>99.9% majority vote accuracy</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-5" style="background:;">
+  <hgroup>
+    <h2>Approaches for combining classifiers</h2>
+  </hgroup>
+  <article>
+    <ol>
+<li>Bagging (see previous lecture)</li>
+<li><a href="http://en.wikipedia.org/wiki/AdaBoost">Boosting</a></li>
+<li>Combining different classifiers</li>
+</ol>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-6" style="background:;">
+  <hgroup>
+    <h2>Example</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">#library(devtools)
+#install_github(&quot;medley&quot;,&quot;mewo2&quot;)
+library(medley)
+set.seed(453234)
+y &lt;- rnorm(1000)
+x1 &lt;- (y &gt; 0); x2 &lt;- y*rnorm(1000)
+x3 &lt;- rnorm(1000,mean=y,sd=1); x4 &lt;- (y &gt; 0) &amp; (y &lt; 3)
+x5 &lt;- rbinom(1000,size=4,prob=exp(y)/(1+exp(y)))
+x6 &lt;- (y &lt; -2) | (y &gt; 2)
+data &lt;- data.frame(y=y,x1=x1,x2=x2,x3=x3,x4=x4,x5=x5,x6=x6)
+train &lt;- sample(1:1000,size=500)
+trainData &lt;- data[train,]; testData &lt;- data[-train,]
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-7" style="background:;">
+  <hgroup>
+    <h2>Basic models</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">library(tree)
+lm1 &lt;- lm(y ~.,data=trainData)
+rmse(predict(lm1,data=testData),testData$y)
+</code></pre>
+
+<pre><code>[1] 1.294
+</code></pre>
+
+<pre><code class="r">tree1 &lt;- tree(y ~.,data=trainData)
+rmse(predict(tree1,data=testData),testData$y)
+</code></pre>
+
+<pre><code>[1] 1.299
+</code></pre>
+
+<pre><code class="r">tree2 &lt;- tree(y~.,data=trainData[sample(1:dim(trainData)[1]),])
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-8" style="background:;">
+  <hgroup>
+    <h2>Combining models</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">combine1 &lt;- predict(lm1,data=testData)/2 + predict(tree1,data=testData)/2
+rmse(combine1,testData$y)
+</code></pre>
+
+<pre><code>[1] 1.281
+</code></pre>
+
+<pre><code class="r">combine2 &lt;- (predict(lm1,data=testData)/3 + predict(tree1,data=testData)/3 
+             + predict(tree2,data=testData)/3)
+rmse(combine2,testData$y)
+</code></pre>
+
+<pre><code>[1] 1.175
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-9" style="background:;">
+  <hgroup>
+    <h2>Medley package</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">#library(devtools)
+#install_github(&quot;medley&quot;,&quot;mewo2&quot;)
+library(medley)
+library(e1071)
+library(randomForests)
+x &lt;- trainData[,-1]
+y &lt;- trainData$y
+newx &lt;- testData[,-1]
+</code></pre>
+
+<p><a href="http://www.kaggle.com/users/10748/martin-o-leary">http://www.kaggle.com/users/10748/martin-o-leary</a></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-10" style="background:;">
+  <hgroup>
+    <h2>Blending models (part 1)</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">m &lt;- create.medley(x, y, errfunc=rmse);
+for (g in 1:10) {
+  m &lt;- add.medley(m, svm, list(gamma=1e-3 * g));
+}
+</code></pre>
+
+<pre><code> CV model 1 svm (gamma = 0.001) time: 0.362 error: 0.5557 
+ CV model 2 svm (gamma = 0.002) time: 0.373 error: 0.5367 
+ CV model 3 svm (gamma = 0.003) time: 0.38 error: 0.5345 
+ CV model 4 svm (gamma = 0.004) time: 0.376 error: 0.5333 
+ CV model 5 svm (gamma = 0.005) time: 0.364 error: 0.5301 
+ CV model 6 svm (gamma = 0.006) time: 0.355 error: 0.5265 
+ CV model 7 svm (gamma = 0.007) time: 0.365 error: 0.5197 
+ CV model 8 svm (gamma = 0.008) time: 0.359 error: 0.5115 
+ CV model 9 svm (gamma = 0.009) time: 0.369 error: 0.5026 
+ CV model 10 svm (gamma = 0.01) time: 0.355 error: 0.4946 
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-11" style="background:;">
+  <hgroup>
+    <h2>Blending models (part 2)</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">for (mt in 1:2) {
+  m &lt;- add.medley(m, randomForest, list(mtry=mt));
+}
+</code></pre>
+
+<pre><code> CV model 11 randomForest (mtry = 1) time: 2.015 error: 0.4668 
+ CV model 12 randomForest (mtry = 2) time: 3.532 error: 0.4135 
+</code></pre>
+
+<pre><code class="r">m &lt;- prune.medley(m, 0.8);
+rmse(predict(m,newx),testData$y)
+</code></pre>
+
+<pre><code>Sampled... 96.00 %:  3 svm (gamma = 0.01) 
+1.00 %:  4 svm (gamma = 0.009) 
+1.00 %:  5 svm (gamma = 0.008) 
+1.00 %:  6 svm (gamma = 0.007) 
+1.00 %:  7 svm (gamma = 0.006) 
+CV error: 0.4953 
+</code></pre>
+
+<pre><code>[1] 0.4691
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-12" style="background:;">
+  <hgroup>
+    <h2>Notes and further resources</h2>
+  </hgroup>
+  <article>
+    <p><strong>Notes</strong>:</p>
+
+<ul>
+<li>Even simple blending can be useful</li>
+<li>Majority vote is typical model for binary/multiclass data</li>
+<li>Makes models hard to interpret</li>
+</ul>
+
+<p><strong>Further resources</strong>:</p>
+
+<ul>
+<li><a href="http://www.research.att.com/%7Evolinsky/bma.html">Bayesian model averaging</a></li>
+<li><a href="https://www.heritagehealthprize.com/c/hhp/details/milestone-winners">Heritage health prize</a></li>
+<li><a href="http://www2.research.att.com/%7Evolinsky/papers/chance.pdf">Netflix model blending</a></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+
+  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+<!-- Grab CDN jQuery, fall back to local if offline -->
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+<script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery-1.7.min.js"><\/script>')</script>
+<!-- Load Javascripts for Widgets -->
+<!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script> -->
+<script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
+<!-- LOAD HIGHLIGHTER JS FILES -->
+<script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<!-- DONE LOADING HIGHLIGHTER JS FILES -->
+</html>
