@@ -1,0 +1,282 @@
+---
+title       : Bootstrapping for prediction
+subtitle    : 
+author      : Jeffrey Leek, Assistant Professor of Biostatistics 
+job         : Johns Hopkins Bloomberg School of Public Health
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow  # 
+widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+---
+
+
+```{r setup, cache = F, echo = F, message = F, warning = F, tidy = F}
+# make this an external chunk that can be included in any file
+options(width = 100)
+opts_chunk$set(message = F, error = F, warning = F, comment = NA, fig.align = 'center', dpi = 100, tidy = F, cache.path = '.cache/', fig.path = 'fig/')
+
+options(xtable.type = 'html')
+knit_hooks$set(inline = function(x) {
+  if(is.numeric(x)) {
+    round(x, getOption('digits'))
+  } else {
+    paste(as.character(x), collapse = ', ')
+  }
+})
+knit_hooks$set(plot = knitr:::hook_plot_html)
+```
+
+## Key ideas
+
+* Bootstrapping can be used for
+  * Cross-validation type error rates
+  * Prediction errors in regression models
+  * Improving prediction
+
+---
+
+## Bootstrapping prediction errors
+
+```{r nucData,fig.height=4,fig.width=4}
+library(boot); data(nuclear)
+nuke.lm <- lm(log(cost) ~ date,data=nuclear)
+plot(nuclear$date,log(nuclear$cost),pch=19)
+abline(nuke.lm,col="red",lwd=3)
+```
+
+---
+
+## Bootstrapping prediction errors
+
+```{r nucBoot, dependson="nucData",fig.height=4,fig.width=4,cache=TRUE}
+newdata <- data.frame(date = seq(65,72,length=100))
+nuclear <- cbind(nuclear,resid=rstudent(nuke.lm),fit=fitted(nuke.lm))
+nuke.fun <- function(data,inds,newdata){
+  lm.b <- lm(fit + resid[inds] ~ date,data=data)
+  pred.b <- predict(lm.b,newdata)
+  return(pred.b)
+}
+nuke.boot <- boot(nuclear,nuke.fun,R=1000,newdata=newdata)
+head(nuke.boot$t)
+```
+
+---
+
+## Bootstrapping prediction errors
+
+```{r,dependson="nucBoot",fig.height=4,fig.width=4,cache=TRUE}
+pred <- predict(nuke.lm,newdata)
+predSds <- apply(nuke.boot$t,2,sd)
+plot(newdata$date,pred,col="black",type="l",lwd=3,ylim=c(0,10))
+lines(newdata$date,pred + 1.96*predSds,col="red",lwd=3)
+lines(newdata$date,pred - 1.96*predSds,col="red",lwd=3)
+```
+
+
+---
+
+## Bootstrap aggregating (bagging)
+
+__Basic idea__: 
+
+1. Resample cases and recalculate predictions
+2. Average or majority vote
+
+__Notes__:
+
+* Similar bias 
+* Reduced variance
+* More useful for non-linear functions
+
+
+---
+
+## Bagged loess
+
+```{r ozoneData}
+library(ElemStatLearn); data(ozone,package="ElemStatLearn")
+ozone <- ozone[order(ozone$ozone),]
+head(ozone)
+```
+[http://en.wikipedia.org/wiki/Bootstrap_aggregating](http://en.wikipedia.org/wiki/Bootstrap_aggregating)
+
+---
+
+## Bagged loess
+
+```{r baggedOzone, dependson="ozoneData"}
+ll <- matrix(NA,nrow=10,ncol=155)
+for(i in 1:10){
+  ss <- sample(1:dim(ozone)[1],replace=T)
+  ozone0 <- ozone[ss,]; ozone0 <- ozone0[order(ozone0$ozone),]
+  loess0 <- loess(temperature ~ ozone,data=ozone0,span=0.2)
+  ll[i,] <- predict(loess0,newdata=data.frame(ozone=1:155))
+}
+```
+
+---
+
+## Bagged loess
+
+```{r, dependson="baggedOzone",fig.height=4.5,fig.width=4.5}
+plot(ozone$ozone,ozone$temperature,pch=19,cex=0.5)
+for(i in 1:10){lines(1:155,ll[i,],col="grey",lwd=2)}
+lines(1:155,apply(ll,2,mean),col="red",lwd=2)
+```
+
+---
+
+## Bagged trees
+
+__Basic idea__:
+
+1. Resample data
+2. Recalculate tree
+3. Average/[mode](http://en.wikipedia.org/wiki/Mode_(statistics)) of predictors 
+
+__Notes__:
+
+1. More stable
+2. May not be as good as random forests
+
+
+---
+
+## Iris data
+
+```{r irisData,fig.height=3,fig.width=3}
+data(iris)
+head(iris)
+```
+
+---
+
+## Bagging a tree
+
+```{r bagTree, dependson="irisData",fig.height=4,fig.width=4}
+library(ipred)
+bagTree <- bagging(Species ~.,data=iris,coob=TRUE)
+print(bagTree)
+```
+
+
+---
+
+## Looking at bagged tree one
+
+```{r, dependson="bagTree",fig.height=4,fig.width=4}
+bagTree$mtrees[[1]]$btree
+```
+
+---
+
+## Looking at bagged tree two
+
+```{r, dependson="bagTree",fig.height=4,fig.width=4}
+bagTree$mtrees[[2]]$btree
+```
+
+
+---
+
+## Random forests
+
+1. Bootstrap samples
+2. At each split, bootstrap variables
+3. Grow multiple trees and vote
+
+__Pros__:
+
+1. Accuracy
+
+__Cons__:
+
+1. Speed
+2. Interpretability
+3. Overfitting
+
+
+---
+
+## Random forests
+```{r forestIris, dependson="irisData",fig.height=4,fig.width=4}
+library(randomForest)
+forestIris <- randomForest(Species~ Petal.Width + Petal.Length,data=iris,prox=TRUE)
+forestIris
+```
+
+---
+
+## Getting a single tree
+
+```{r , dependson="forestIris",fig.height=4,fig.width=4}
+getTree(forestIris,k=2)
+```
+
+---
+
+## Class "centers"
+
+```{r, dependson="forestIris",fig.height=4,fig.width=4}
+iris.p <- classCenter(iris[,c(3,4)], iris$Species, forestIris$prox)
+plot(iris[,3], iris[,4], pch=21, xlab=names(iris)[3], ylab=names(iris)[4],
+bg=c("red", "blue", "green")[as.numeric(factor(iris$Species))],
+main="Iris Data with Prototypes")
+points(iris.p[,1], iris.p[,2], pch=21, cex=2, bg=c("red", "blue", "green"))
+```
+
+
+---
+
+## Combining random forests
+
+```{r, dependson="forestIris",fig.height=4,fig.width=4}
+forestIris1 <- randomForest(Species~Petal.Width + Petal.Length,data=iris,prox=TRUE,ntree=50)
+forestIris2 <- randomForest(Species~Petal.Width + Petal.Length,data=iris,prox=TRUE,ntree=50)
+forestIris3 <- randomForest(Species~Petal.Width + Petal.Length,data=iris,prox=TRUE,nrtee=50)
+combine(forestIris1,forestIris2,forestIris3)
+```
+
+---
+
+## Predicting new values
+
+```{r predForest, dependson="forestIris",fig.height=4,fig.width=4}
+newdata <- data.frame(Sepal.Length<- rnorm(1000,mean(iris$Sepal.Length),
+                                           sd(iris$Sepal.Length)),
+                      Sepal.Width <- rnorm(1000,mean(iris$Sepal.Width),
+                                           sd(iris$Sepal.Width)),
+                      Petal.Width <- rnorm(1000,mean(iris$Petal.Width),
+                                           sd(iris$Petal.Width)),
+                      Petal.Length <- rnorm(1000,mean(iris$Petal.Length),
+                                            sd(iris$Petal.Length)))
+
+pred <- predict(forestIris,newdata)
+```
+
+---
+
+## Predicting new values
+
+```{r, dependson="predForest",fig.height=4,fig.width=4}
+plot(newdata[,4], newdata[,3], pch=21, xlab="Petal.Length",ylab="Petal.Width",
+bg=c("red", "blue", "green")[as.numeric(pred)],main="newdata Predictions")
+```
+
+---
+
+## Notes and further resources
+
+__Notes__:
+
+* Bootstrapping is useful for nonlinear models
+* Care should be taken to avoid overfitting (see [rfcv](http://cran.r-project.org/web/packages/randomForest/randomForest.pdf) funtion)
+* Out of bag estimates are efficient estimates of test error
+
+__Further resources__:
+
+* [Random forests](http://www.stat.berkeley.edu/~breiman/RandomForests/cc_home.htm)
+* [Random forest Wikipedia](http://en.wikipedia.org/wiki/Random_forest)
+* [Bagging](http://en.wikipedia.org/wiki/Bootstrap_aggregating)
+* [Bagging and boosting](http://stat.ethz.ch/education/semesters/FS_2008/CompStat/sk-ch8.pdf)

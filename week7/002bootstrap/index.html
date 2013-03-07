@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>The bootstrap</title>
+  <meta charset="utf-8">
+  <meta name="description" content="The bootstrap">
+  <meta name="author" content="Jeffrey Leek, Assistant Professor of Biostatistics">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+    <link rel="stylesheet" href = "assets/css/custom.css">
+<link rel="stylesheet" href = "assets/css/ribbons.css">
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+    <!-- END LOGO SLIDE -->
+    
+
+    <!-- TITLE SLIDE -->
+    <!-- Should I move this to a Local Layout File? -->
+    <slide class="title-slide segue nobackground">
+      <hgroup class="auto-fadein">
+        <h1>The bootstrap</h1>
+        <h2></h2>
+        <p>Jeffrey Leek, Assistant Professor of Biostatistics<br/>Johns Hopkins Bloomberg School of Public Health</p>
+      </hgroup>
+          </slide>
+
+    <!-- SLIDES -->
+      <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h2>Key ideas</h2>
+  </hgroup>
+  <article>
+    <ul>
+<li>Treat the sample as if it were the population</li>
+</ul>
+
+<p><strong>What it is good for</strong>:</p>
+
+<ul>
+<li>Calculating standard errors</li>
+<li>Forming confidence intervals</li>
+<li>Performing hypothesis tests</li>
+<li>Improving predictors</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-2" style="background:;">
+  <hgroup>
+    <h2>The &quot;Central Dogma&quot; of statistics</h2>
+  </hgroup>
+  <article>
+    <p><img class=center src=assets/img/centraldogma.png height='70%'/></p>
+
+<p><a href="http://www.gs.washington.edu/academics/courses/akey/56008/lecture/lecture5.pdf">http://www.gs.washington.edu/academics/courses/akey/56008/lecture/lecture5.pdf</a></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h2>The bootstrap</h2>
+  </hgroup>
+  <article>
+    <p><img class=center src=assets/img/bootstrap.png height='70%'/></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>Example</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">set.seed(333); x &lt;- rnorm(30)
+bootMean &lt;- rep(NA,1000); sampledMean &lt;- rep(NA,1000)
+for(i in 1:1000){bootMean[i] &lt;- mean(sample(x,replace=TRUE))}
+for(i in 1:1000){sampledMean[i] &lt;- mean(rnorm(30))}
+plot(density(bootMean)); lines(density(sampledMean),col=&quot;red&quot;)
+</code></pre>
+
+<div class="rimage center"><img src="fig/unnamed-chunk-1.png" title="plot of chunk unnamed-chunk-1" alt="plot of chunk unnamed-chunk-1" class="plot" /></div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-5" style="background:;">
+  <hgroup>
+    <h2>Example with boot package</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">set.seed(333); x &lt;- rnorm(30); sampledMean &lt;- rep(NA,1000)
+for(i in 1:1000){sampledMean[i] &lt;- mean(rnorm(30))}
+meanFunc &lt;- function(x,i){mean(x[i])}
+bootMean &lt;- boot(x,meanFunc,1000)
+bootMean
+</code></pre>
+
+<pre><code>
+ORDINARY NONPARAMETRIC BOOTSTRAP
+
+
+Call:
+boot(data = x, statistic = meanFunc, R = 1000)
+
+
+Bootstrap Statistics :
+    original    bias    std. error
+t1* -0.01942 0.0006377       0.175
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-6" style="background:;">
+  <hgroup>
+    <h2>Plotting boot package example</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">plot(density(bootMean$t)); lines(density(sampledMean),col=&quot;red&quot;)
+</code></pre>
+
+<div class="rimage center"><img src="fig/unnamed-chunk-2.png" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" class="plot" /></div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-7" style="background:;">
+  <hgroup>
+    <h2>Nuclear costs</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">library(boot); data(nuclear)
+nuke.lm &lt;- lm(log(cost) ~ date,data=nuclear)
+plot(nuclear$date,log(nuclear$cost),pch=19)
+abline(nuke.lm,col=&quot;red&quot;,lwd=3)
+</code></pre>
+
+<div class="rimage center"><img src="fig/bootNuc.png" title="plot of chunk bootNuc" alt="plot of chunk bootNuc" class="plot" /></div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-8" style="background:;">
+  <hgroup>
+    <h2>Nuclear costs</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">par(mfrow=c(1,3))
+for(i in 1:3){
+  nuclear0 &lt;- nuclear[sample(1:dim(nuclear)[1],replace=TRUE),]
+  nuke.lm0 &lt;- lm(log(cost) ~ date,data=nuclear0)
+  plot(nuclear0$date,log(nuclear0$cost),pch=19)
+  abline(nuke.lm0,col=&quot;red&quot;,lwd=3)
+}
+</code></pre>
+
+<div class="rimage center"><img src="fig/nukeLm.png" title="plot of chunk nukeLm" alt="plot of chunk nukeLm" class="plot" /></div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-9" style="background:;">
+  <hgroup>
+    <h2>Bootstrap distribution</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">bs &lt;- function(data, indices,formula) {
+  d &lt;- data[indices,];fit &lt;- lm(formula, data=d);return(coef(fit)) 
+} 
+results &lt;- boot(data=nuclear, statistic=bs, R=1000, formula=log(cost) ~ date)
+plot(density(results$t[,2]),col=&quot;red&quot;,lwd=3)
+lines(rep(nuke.lm$coeff[2],10),seq(0,8,length=10),col=&quot;blue&quot;,lwd=3)
+</code></pre>
+
+<div class="rimage center"><img src="fig/nucRes.png" title="plot of chunk nucRes" alt="plot of chunk nucRes" class="plot" /></div>
+
+<p><a href="http://www.statmethods.net/advstats/bootstrapping.html">http://www.statmethods.net/advstats/bootstrapping.html</a></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-10" style="background:;">
+  <hgroup>
+    <h2>Bootstrap confidence intervals</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">boot.ci(results)
+</code></pre>
+
+<pre><code>BOOTSTRAP CONFIDENCE INTERVAL CALCULATIONS
+Based on 1000 bootstrap replicates
+
+CALL : 
+boot.ci(boot.out = results)
+
+Intervals : 
+Level      Normal              Basic             Studentized     
+95%   (-16.481,  -3.130 )   (-15.746,  -2.553 )   (-17.153,  -3.842 )  
+
+Level     Percentile            BCa          
+95%   (-17.435,  -4.242 )   (-17.475,  -4.249 )  
+Calculations and Intervals on Original Scale
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-11" style="background:;">
+  <hgroup>
+    <h2>Bootstrapping from a model</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">resid &lt;- rstudent(nuke.lm)
+fit0 &lt;- fitted(lm(log(cost) ~ 1,data=nuclear))
+newNuc &lt;- cbind(nuclear,resid=resid,fit0=fit0)
+bs &lt;- function(data, indices) {
+  return(coef(glm(data$fit0 + data$resid[indices] ~ data$date,data=data)))
+} 
+results &lt;- boot(data=newNuc, statistic=bs, R=1000)
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-12" style="background:;">
+  <hgroup>
+    <h2>Results</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">plot(density(results$t[,2]),lwd=3,col=&quot;blue&quot;)
+lines(rep(coef(nuke.lm)[2],10),seq(0,3,length=10),col=&quot;red&quot;,lwd=3)
+</code></pre>
+
+<div class="rimage center"><img src="fig/unnamed-chunk-4.png" title="plot of chunk unnamed-chunk-4" alt="plot of chunk unnamed-chunk-4" class="plot" /></div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-13" style="background:;">
+  <hgroup>
+    <h2>An empirical p-value</h2>
+  </hgroup>
+  <article>
+    <p>\[ \hat{p} = \frac{1 + \sum_{b=1}^B |t_b^0| > |t|}{B+1}\]</p>
+
+<pre><code class="r">B &lt;- dim(results$t)[1]
+(1 + sum((abs(results$t[,2]) &gt; abs(coef(nuke.lm)[2]))))/(B+1)
+</code></pre>
+
+<pre><code>[1] 0.1838
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-14" style="background:;">
+  <hgroup>
+    <h2>Bootstrapping non-linear statistics</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">set.seed(555); x &lt;- rnorm(30); sampledMed &lt;- rep(NA,1000)
+for(i in 1:1000){sampledMed[i] &lt;- median(rnorm(30))}
+medFunc &lt;- function(x,i){median(x[i])}; bootMed &lt;- boot(x,medFunc,1000)
+plot(density(bootMed$t),col=&quot;red&quot;,lwd=3)
+lines(density(sampledMed),lwd=3)
+</code></pre>
+
+<div class="rimage center"><img src="fig/unnamed-chunk-6.png" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" class="plot" /></div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-15" style="background:;">
+  <hgroup>
+    <h2>Things you can&#39;t bootstrap (max)</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">set.seed(333); x &lt;- rnorm(30); sampledMax &lt;- rep(NA,1000)
+for(i in 1:1000){sampledMax[i] &lt;- max(rnorm(30))}
+maxFunc &lt;- function(x,i){max(x[i])}; bootMax &lt;- boot(x,maxFunc,1000)
+plot(density(bootMax$t),col=&quot;red&quot;,lwd=3,xlim=c(1,3))
+lines(density(sampledMax),lwd=3)
+</code></pre>
+
+<div class="rimage center"><img src="fig/unnamed-chunk-7.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" class="plot" /></div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-16" style="background:;">
+  <hgroup>
+    <h2>Notes and further resources</h2>
+  </hgroup>
+  <article>
+    <p><strong>Notes</strong>:</p>
+
+<ul>
+<li>Can be useful for complicated statistics</li>
+<li>Be careful near the boundaries</li>
+<li>Be careful with non-linear functions</li>
+</ul>
+
+<p><strong>Further resources</strong>:</p>
+
+<ul>
+<li><a href="http://ocw.jhsph.edu/courses/MethodsInBiostatisticsI/PDFs/lecture12.pdf">Brian Caffo&#39;s bootstrap notes</a></li>
+<li><a href="http://www.mayin.org/ajayshah/KB/R/documents/boot.html">Nice basic intro to boot package</a></li>
+<li><a href="http://www.statmethods.net/advstats/bootstrapping.html">Another basic boot tutorial</a></li>
+<li><a href="http://www.amazon.com/Introduction-Bootstrap-Monographs-Statistics-Probability/dp/0412042312">An introduction to the bootstrap</a></li>
+<li><a href="http://www.jstor.org/discover/10.2307/2408678?uid=3739704&amp;uid=2&amp;uid=4&amp;uid=3739256&amp;sid=21101897412687">Confidence limits on phylogenies</a></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+
+  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+<!-- Grab CDN jQuery, fall back to local if offline -->
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+<script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery-1.7.min.js"><\/script>')</script>
+<!-- Load Javascripts for Widgets -->
+<!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script> -->
+<script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
+<!-- LOAD HIGHLIGHTER JS FILES -->
+<script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<!-- DONE LOADING HIGHLIGHTER JS FILES -->
+</html>

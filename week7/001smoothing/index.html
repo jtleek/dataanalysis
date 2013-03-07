@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Smoothing</title>
+  <meta charset="utf-8">
+  <meta name="description" content="Smoothing">
+  <meta name="author" content="Jeffrey Leek, Assistant Professor of Biostatistics">
+  <meta name="generator" content="slidify" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/default.css" media="all" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/phone.css" 
+    media="only screen and (max-device-width: 480px)" >
+  <link rel="stylesheet" href="libraries/frameworks/io2012/css/slidify.css" >
+  <link rel="stylesheet" href="libraries/highlighters/highlight.js/css/tomorrow.css" />
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->
+  <script data-main="libraries/frameworks/io2012/js/slides" 
+    src="libraries/frameworks/io2012/js/require-1.0.8.min.js">
+  </script>
+  
+    <link rel="stylesheet" href = "assets/css/custom.css">
+<link rel="stylesheet" href = "assets/css/ribbons.css">
+
+</head>
+<body style="opacity: 0">
+  <slides class="layout-widescreen">
+    
+    <!-- LOGO SLIDE -->
+    <!-- END LOGO SLIDE -->
+    
+
+    <!-- TITLE SLIDE -->
+    <!-- Should I move this to a Local Layout File? -->
+    <slide class="title-slide segue nobackground">
+      <hgroup class="auto-fadein">
+        <h1>Smoothing</h1>
+        <h2></h2>
+        <p>Jeffrey Leek, Assistant Professor of Biostatistics<br/>Johns Hopkins Bloomberg School of Public Health</p>
+      </hgroup>
+          </slide>
+
+    <!-- SLIDES -->
+      <slide class="" id="slide-1" style="background:;">
+  <hgroup>
+    <h2>Key ideas</h2>
+  </hgroup>
+  <article>
+    <ul>
+<li>Sometimes there are non-linear trends in data</li>
+<li>We can use &quot;smoothing&quot; to try to capture these</li>
+<li>Still a risk of overfitting </li>
+<li>Often hard to interpret</li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-2" style="background:;">
+  <hgroup>
+    <h2>CD4 Data</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">download.file(&quot;https://spark-public.s3.amazonaws.com/dataanalysis/cd4.data&quot;,
+              destfile=&quot;./data/cd4.data&quot;,method=&quot;curl&quot;)
+cd4Data &lt;- read.table(&quot;./data/cd4.data&quot;, 
+                      col.names=c(&quot;time&quot;, &quot;cd4&quot;, &quot;age&quot;, &quot;packs&quot;, &quot;drugs&quot;, &quot;sex&quot;,
+                                  &quot;cesd&quot;, &quot;id&quot;))
+cd4Data &lt;- cd4Data[order(cd4Data$time),]
+head(cd4Data)
+</code></pre>
+
+<pre><code>       time  cd4   age packs drugs sex cesd    id
+1279 -2.990  814  6.17     3     1   5   -3 30183
+2190 -2.990  400 -6.02     0     0   3   -4 41406
+1167 -2.984  467 13.94     0     1   1    0 30046
+1427 -2.957  749 -4.54     0     1  -1   -7 30498
+2032 -2.951 1218  5.57     3     1   5    3 41032
+1813 -2.949 1015 -9.15     2     1   0   -7 40375
+</code></pre>
+
+<p><a href="http://www.cbcb.umd.edu/%7Ehcorrada/PracticalML/">http://www.cbcb.umd.edu/~hcorrada/PracticalML/</a></p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-3" style="background:;">
+  <hgroup>
+    <h2>CD4 over time</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">plot(cd4Data$time,cd4Data$cd4,pch=19,cex=0.1)
+</code></pre>
+
+<div class="rimage center"><img src="fig/unnamed-chunk-1.png" title="plot of chunk unnamed-chunk-1" alt="plot of chunk unnamed-chunk-1" class="plot" /></div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-4" style="background:;">
+  <hgroup>
+    <h2>Average first 2 points</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">plot(cd4Data$time,cd4Data$cd4,pch=19,cex=0.1)
+points(mean(cd4Data$time[1:2]),mean(cd4Data$cd4[1:2]),col=&quot;blue&quot;,pch=19)
+</code></pre>
+
+<div class="rimage center"><img src="fig/unnamed-chunk-2.png" title="plot of chunk unnamed-chunk-2" alt="plot of chunk unnamed-chunk-2" class="plot" /></div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-5" style="background:;">
+  <hgroup>
+    <h2>Average second and third points</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">plot(cd4Data$time,cd4Data$cd4,pch=19,cex=0.1)
+points(mean(cd4Data$time[1:2]),mean(cd4Data$cd4[1:2]),col=&quot;blue&quot;,pch=19)
+points(mean(cd4Data$time[2:3]),mean(cd4Data$cd4[2:3]),col=&quot;blue&quot;,pch=19)
+</code></pre>
+
+<div class="rimage center"><img src="fig/unnamed-chunk-3.png" title="plot of chunk unnamed-chunk-3" alt="plot of chunk unnamed-chunk-3" class="plot" /></div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-6" style="background:;">
+  <hgroup>
+    <h2>A moving average</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">plot(cd4Data$time,cd4Data$cd4,pch=19,cex=0.1)
+aveTime &lt;- aveCd4 &lt;- rep(NA,length(3:(dim(cd4Data)[1]-2)))
+for(i in 3:(dim(cd4Data)[1]-2)){
+    aveTime[i] &lt;- mean(cd4Data$time[(i-2):(i+2)])
+    aveCd4[i] &lt;- mean(cd4Data$cd4[(i-2):(i+2)])
+}
+lines(aveTime,aveCd4,col=&quot;blue&quot;,lwd=3)
+</code></pre>
+
+<div class="rimage center"><img src="fig/unnamed-chunk-4.png" title="plot of chunk unnamed-chunk-4" alt="plot of chunk unnamed-chunk-4" class="plot" /></div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-7" style="background:;">
+  <hgroup>
+    <h2>Average more points</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">plot(cd4Data$time,cd4Data$cd4,pch=19,cex=0.1)
+aveTime &lt;- aveCd4 &lt;- rep(NA,length(11:(dim(cd4Data)[1]-10)))
+for(i in 11:(dim(cd4Data)[1]-2)){
+  aveTime[i] &lt;- mean(cd4Data$time[(i-10):(i+10)])
+ aveCd4[i] &lt;- mean(cd4Data$cd4[(i-10):(i+10)])
+}
+lines(aveTime,aveCd4,col=&quot;blue&quot;,lwd=3)
+</code></pre>
+
+<div class="rimage center"><img src="fig/unnamed-chunk-5.png" title="plot of chunk unnamed-chunk-5" alt="plot of chunk unnamed-chunk-5" class="plot" /></div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-8" style="background:;">
+  <hgroup>
+    <h2>Average many more</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">plot(cd4Data$time,cd4Data$cd4,pch=19,cex=0.1)
+aveTime &lt;- aveCd4 &lt;- rep(NA,length(201:(dim(cd4Data)[1]-200)))
+for(i in 201:(dim(cd4Data)[1]-2)){
+    aveTime[i] &lt;- mean(cd4Data$time[(i-200):(i+200)])
+    aveCd4[i] &lt;- mean(cd4Data$cd4[(i-200):(i+200)])
+}
+lines(aveTime,aveCd4,col=&quot;blue&quot;,lwd=3)
+</code></pre>
+
+<div class="rimage center"><img src="fig/unnamed-chunk-6.png" title="plot of chunk unnamed-chunk-6" alt="plot of chunk unnamed-chunk-6" class="plot" /></div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-9" style="background:;">
+  <hgroup>
+    <h2>A faster way</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">filtTime &lt;- as.vector(filter(cd4Data$time,filter=rep(1,200))/200)
+filtCd4 &lt;- as.vector(filter(cd4Data$cd4,filter=rep(1,200))/200)
+plot(cd4Data$time,cd4Data$cd4,pch=19,cex=0.1); lines(filtTime,filtCd4,col=&quot;blue&quot;,lwd=3)
+</code></pre>
+
+<div class="rimage center"><img src="fig/unnamed-chunk-7.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" class="plot" /></div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-10" style="background:;">
+  <hgroup>
+    <h2>Averaging = weighted sums</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">filtCd4 &lt;- as.vector(filter(cd4Data$cd4,filter=rep(1,4))/4)
+filtCd4[2]
+</code></pre>
+
+<pre><code>[1] 607.5
+</code></pre>
+
+<pre><code class="r">sum(cd4Data$cd4[1:4] * rep(1/4,4))
+</code></pre>
+
+<pre><code>[1] 607.5
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-11" style="background:;">
+  <hgroup>
+    <h2>Other weights -&gt; should sum to one</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">ws = 10; tukey = function(x) pmax(1 - x^2,0)^2
+filt= tukey(seq(-ws,ws)/(ws+1));filt=filt/sum(filt)
+plot(seq(-(ws),(ws)),filt,pch=19)
+</code></pre>
+
+<div class="rimage center"><img src="fig/unnamed-chunk-9.png" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" class="plot" /></div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-12" style="background:;">
+  <hgroup>
+    <h2>Other weights -&gt; should sum to one</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">ws = 100; tukey = function(x) pmax(1 - x^2,0)^2
+filt= tukey(seq(-ws,ws)/(ws+1));filt=filt/sum(filt)
+filtTime &lt;- as.vector(filter(cd4Data$time,filter=filt))
+filtCd4 &lt;- as.vector(filter(cd4Data$cd4,filter=filt))
+plot(cd4Data$time,cd4Data$cd4,pch=19,cex=0.1); lines(filtTime,filtCd4,col=&quot;blue&quot;,lwd=3)
+</code></pre>
+
+<div class="rimage center"><img src="fig/unnamed-chunk-10.png" title="plot of chunk unnamed-chunk-10" alt="plot of chunk unnamed-chunk-10" class="plot" /></div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-13" style="background:;">
+  <hgroup>
+    <h2>Lowess (loess)</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">lw1 &lt;- loess(cd4 ~ time,data=cd4Data)
+plot(cd4Data$time,cd4Data$cd4,pch=19,cex=0.1)
+lines(cd4Data$time,lw1$fitted,col=&quot;blue&quot;,lwd=3)
+</code></pre>
+
+<div class="rimage center"><img src="fig/lowess.png" title="plot of chunk lowess" alt="plot of chunk lowess" class="plot" /></div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-14" style="background:;">
+  <hgroup>
+    <h2>Span</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">plot(cd4Data$time,cd4Data$cd4,pch=19,cex=0.1,ylim=c(500,1500))
+lines(cd4Data$time,loess(cd4 ~ time,data=cd4Data,span=0.1)$fitted,col=&quot;blue&quot;,lwd=3)
+lines(cd4Data$time,loess(cd4 ~ time,data=cd4Data,span=0.25)$fitted,col=&quot;red&quot;,lwd=3)
+lines(cd4Data$time,loess(cd4 ~ time,data=cd4Data,span=0.76)$fitted,col=&quot;green&quot;,lwd=3)
+</code></pre>
+
+<div class="rimage center"><img src="fig/unnamed-chunk-11.png" title="plot of chunk unnamed-chunk-11" alt="plot of chunk unnamed-chunk-11" class="plot" /></div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-15" style="background:;">
+  <hgroup>
+    <h2>Predicting with loess</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">tme &lt;- seq(-2,5,length=100); pred1 = predict(lw1,newdata=data.frame(time=tme),se=TRUE)
+plot(tme,pred1$fit,col=&quot;blue&quot;,lwd=3,type=&quot;l&quot;,ylim=c(0,2500))
+lines(tme,pred1$fit + 1.96*pred1$se.fit,col=&quot;red&quot;,lwd=3)
+lines(tme,pred1$fit - 1.96*pred1$se.fit,col=&quot;red&quot;,lwd=3)
+points(cd4Data$time,cd4Data$cd4,pch=19,cex=0.1)
+</code></pre>
+
+<div class="rimage center"><img src="fig/unnamed-chunk-12.png" title="plot of chunk unnamed-chunk-12" alt="plot of chunk unnamed-chunk-12" class="plot" /></div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-16" style="background:;">
+  <hgroup>
+    <h2>Splines</h2>
+  </hgroup>
+  <article>
+    <p>\[ Y_i = b_0 + \sum_{k=1}^K b_k s_k(x_i) + e_i \]</p>
+
+<p>\(Y_i\) - outcome for $i$th observation</p>
+
+<p>\(b_0\) - Intercept term</p>
+
+<p>\(b_k\) - Coefficient for $k$th spline function</p>
+
+<p>\(s_k\) - $k$th spline function</p>
+
+<p>\(x_i\) - covariate for $i$th observation</p>
+
+<p>\(e_i\) - everything we didn&#39;t measure/model</p>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-17" style="background:;">
+  <hgroup>
+    <h2>Splines in R</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">library(splines)
+ns1 &lt;- ns(cd4Data$time,df=3)
+par(mfrow=c(1,3))
+plot(cd4Data$time,ns1[,1]); plot(cd4Data$time,ns1[,2]); plot(cd4Data$time,ns1[,3])
+</code></pre>
+
+<div class="rimage center"><img src="fig/splines.png" title="plot of chunk splines" alt="plot of chunk splines" class="plot" /></div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-18" style="background:;">
+  <hgroup>
+    <h2>Regression with splines</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">lm1 &lt;- lm(cd4Data$cd4 ~ ns1)
+summary(lm1)
+</code></pre>
+
+<pre><code>
+Call:
+lm(formula = cd4Data$cd4 ~ ns1)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-780.0 -242.4  -61.3  169.5 2263.7 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)    982.0       33.9   29.01  &lt; 2e-16 ***
+ns11          -611.3       32.6  -18.78  &lt; 2e-16 ***
+ns12          -373.7       79.4   -4.71  2.6e-06 ***
+ns13          -374.8       41.2   -9.09  &lt; 2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1 
+
+Residual standard error: 357 on 2372 degrees of freedom
+Multiple R-squared: 0.203,  Adjusted R-squared: 0.202 
+F-statistic:  202 on 3 and 2372 DF,  p-value: &lt;2e-16 
+</code></pre>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-19" style="background:;">
+  <hgroup>
+    <h2>Fitted values</h2>
+  </hgroup>
+  <article>
+    <pre><code class="r">plot(cd4Data$time,cd4Data$cd4,pch=19,cex=0.1)
+points(cd4Data$time,lm1$fitted,col=&quot;blue&quot;,pch=19,cex=0.5)
+</code></pre>
+
+<div class="rimage center"><img src="fig/unnamed-chunk-13.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" class="plot" /></div>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+      <slide class="" id="slide-20" style="background:;">
+  <hgroup>
+    <h2>Notes and further resources</h2>
+  </hgroup>
+  <article>
+    <p><strong>Notes</strong>:</p>
+
+<ul>
+<li>Cross-validation with splines/smoothing is a good idea</li>
+<li>Do not predict outside the range of observed data</li>
+</ul>
+
+<p><strong>Further resources</strong>:</p>
+
+<ul>
+<li><a href="http://www.cbcb.umd.edu/%7Ehcorrada/PracticalML/pdf/lectures/smoothing.pdf">Hector Corrada Bravo&#39;s Lecture Notes</a></li>
+<li><a href="http://www.biostat.jhsph.edu/%7Eririzarr/Teaching/649/section-06.pdf">Rafa Irizarry&#39;s Lecture Notes on smoothing</a>, <a href="http://www.biostat.jhsph.edu/%7Eririzarr/Teaching/649/section-09.pdf">On splines</a></li>
+<li><a href="http://www-stat.stanford.edu/%7Etibs/ElemStatLearn/">Elements of Statistical Learning</a></li>
+<li><a href="http://www.stat.cmu.edu/%7Ecshalizi/ADAfaEPoV/ADAfaEPoV.pdf">Advanced Data Analysis from An Elementary Point of View</a></li>
+</ul>
+
+  </article>
+  <!-- Presenter Notes -->
+</slide>
+
+    <slide class="backdrop"></slide>
+  </slides>
+
+  <!--[if IE]>
+    <script 
+      src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js">  
+    </script>
+    <script>CFInstall.check({mode: 'overlay'});</script>
+  <![endif]-->
+</body>
+<!-- Grab CDN jQuery, fall back to local if offline -->
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.min.js"></script>
+<script>window.jQuery || document.write('<script src="libraries/widgets/quiz/js/jquery-1.7.min.js"><\/script>')</script>
+<!-- Load Javascripts for Widgets -->
+<!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [['$','$'], ['\\(','\\)']],
+      processEscapes: true
+    }
+  });
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script> -->
+<script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
+<!-- LOAD HIGHLIGHTER JS FILES -->
+<script src="libraries/highlighters/highlight.js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<!-- DONE LOADING HIGHLIGHTER JS FILES -->
+</html>

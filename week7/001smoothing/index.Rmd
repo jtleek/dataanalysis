@@ -1,0 +1,270 @@
+---
+title       : Smoothing
+subtitle    : 
+author      : Jeffrey Leek, Assistant Professor of Biostatistics 
+job         : Johns Hopkins Bloomberg School of Public Health
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow  # 
+widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+---
+
+
+```{r setup, cache = F, echo = F, message = F, warning = F, tidy = F}
+# make this an external chunk that can be included in any file
+options(width = 100)
+opts_chunk$set(message = F, error = F, warning = F, comment = NA, fig.align = 'center', dpi = 100, tidy = F, cache.path = '.cache/', fig.path = 'fig/')
+
+options(xtable.type = 'html')
+knit_hooks$set(inline = function(x) {
+  if(is.numeric(x)) {
+    round(x, getOption('digits'))
+  } else {
+    paste(as.character(x), collapse = ', ')
+  }
+})
+knit_hooks$set(plot = knitr:::hook_plot_html)
+```
+
+## Key ideas
+
+* Sometimes there are non-linear trends in data
+* We can use "smoothing" to try to capture these
+* Still a risk of overfitting 
+* Often hard to interpret
+
+---
+
+## CD4 Data
+
+```{r cd4Data, cache=TRUE}
+download.file("https://spark-public.s3.amazonaws.com/dataanalysis/cd4.data",
+              destfile="./data/cd4.data",method="curl")
+cd4Data <- read.table("./data/cd4.data", 
+                      col.names=c("time", "cd4", "age", "packs", "drugs", "sex",
+                                  "cesd", "id"))
+cd4Data <- cd4Data[order(cd4Data$time),]
+head(cd4Data)
+```
+
+[http://www.cbcb.umd.edu/~hcorrada/PracticalML/](http://www.cbcb.umd.edu/~hcorrada/PracticalML/)
+
+---
+
+## CD4 over time
+
+```{r, dependson="cd4Data", cache=TRUE,fig.height=4,fig.width=4}
+plot(cd4Data$time,cd4Data$cd4,pch=19,cex=0.1)
+```
+
+---
+
+## Average first 2 points
+
+```{r, dependson="cd4Data", cache=TRUE,fig.height=4,fig.width=4}
+plot(cd4Data$time,cd4Data$cd4,pch=19,cex=0.1)
+points(mean(cd4Data$time[1:2]),mean(cd4Data$cd4[1:2]),col="blue",pch=19)
+```
+
+---
+
+## Average second and third points
+
+```{r, dependson="cd4Data", cache=TRUE,fig.height=4,fig.width=4}
+plot(cd4Data$time,cd4Data$cd4,pch=19,cex=0.1)
+points(mean(cd4Data$time[1:2]),mean(cd4Data$cd4[1:2]),col="blue",pch=19)
+points(mean(cd4Data$time[2:3]),mean(cd4Data$cd4[2:3]),col="blue",pch=19)
+```
+
+
+---
+
+## A moving average
+
+```{r, dependson="cd4Data", cache=TRUE,fig.height=4,fig.width=4}
+plot(cd4Data$time,cd4Data$cd4,pch=19,cex=0.1)
+aveTime <- aveCd4 <- rep(NA,length(3:(dim(cd4Data)[1]-2)))
+for(i in 3:(dim(cd4Data)[1]-2)){
+    aveTime[i] <- mean(cd4Data$time[(i-2):(i+2)])
+    aveCd4[i] <- mean(cd4Data$cd4[(i-2):(i+2)])
+}
+lines(aveTime,aveCd4,col="blue",lwd=3)
+```
+
+
+---
+
+## Average more points
+
+```{r, dependson="cd4Data", cache=TRUE,fig.height=4,fig.width=4}
+plot(cd4Data$time,cd4Data$cd4,pch=19,cex=0.1)
+aveTime <- aveCd4 <- rep(NA,length(11:(dim(cd4Data)[1]-10)))
+for(i in 11:(dim(cd4Data)[1]-2)){
+  aveTime[i] <- mean(cd4Data$time[(i-10):(i+10)])
+ aveCd4[i] <- mean(cd4Data$cd4[(i-10):(i+10)])
+}
+lines(aveTime,aveCd4,col="blue",lwd=3)
+```
+
+---
+
+## Average many more
+
+```{r, dependson="cd4Data", cache=TRUE,fig.height=4,fig.width=4}
+plot(cd4Data$time,cd4Data$cd4,pch=19,cex=0.1)
+aveTime <- aveCd4 <- rep(NA,length(201:(dim(cd4Data)[1]-200)))
+for(i in 201:(dim(cd4Data)[1]-2)){
+    aveTime[i] <- mean(cd4Data$time[(i-200):(i+200)])
+    aveCd4[i] <- mean(cd4Data$cd4[(i-200):(i+200)])
+}
+lines(aveTime,aveCd4,col="blue",lwd=3)
+```
+
+---
+
+## A faster way
+
+```{r, dependson="cd4Data", cache=TRUE,fig.height=4,fig.width=4}
+filtTime <- as.vector(filter(cd4Data$time,filter=rep(1,200))/200)
+filtCd4 <- as.vector(filter(cd4Data$cd4,filter=rep(1,200))/200)
+plot(cd4Data$time,cd4Data$cd4,pch=19,cex=0.1); lines(filtTime,filtCd4,col="blue",lwd=3)
+```
+
+
+---
+
+## Averaging = weighted sums 
+
+```{r, dependson="cd4Data", cache=TRUE,fig.height=4,fig.width=4}
+filtCd4 <- as.vector(filter(cd4Data$cd4,filter=rep(1,4))/4)
+filtCd4[2]
+sum(cd4Data$cd4[1:4] * rep(1/4,4))
+```
+
+
+---
+
+## Other weights -> should sum to one
+
+```{r, dependson="cd4Data", cache=TRUE,fig.height=4,fig.width=4}
+ws = 10; tukey = function(x) pmax(1 - x^2,0)^2
+filt= tukey(seq(-ws,ws)/(ws+1));filt=filt/sum(filt)
+plot(seq(-(ws),(ws)),filt,pch=19)
+```
+
+---
+
+## Other weights -> should sum to one
+
+```{r, dependson="cd4Data", cache=TRUE,fig.height=4,fig.width=4}
+ws = 100; tukey = function(x) pmax(1 - x^2,0)^2
+filt= tukey(seq(-ws,ws)/(ws+1));filt=filt/sum(filt)
+filtTime <- as.vector(filter(cd4Data$time,filter=filt))
+filtCd4 <- as.vector(filter(cd4Data$cd4,filter=filt))
+plot(cd4Data$time,cd4Data$cd4,pch=19,cex=0.1); lines(filtTime,filtCd4,col="blue",lwd=3)
+```
+
+---
+
+## Lowess (loess)
+
+```{r lowess, dependson="cd4Data",fig.height=4,fig.width=4}
+lw1 <- loess(cd4 ~ time,data=cd4Data)
+plot(cd4Data$time,cd4Data$cd4,pch=19,cex=0.1)
+lines(cd4Data$time,lw1$fitted,col="blue",lwd=3)
+```
+
+
+---
+
+## Span
+
+```{r, dependson="cd4Data",fig.height=4,fig.width=4}
+plot(cd4Data$time,cd4Data$cd4,pch=19,cex=0.1,ylim=c(500,1500))
+lines(cd4Data$time,loess(cd4 ~ time,data=cd4Data,span=0.1)$fitted,col="blue",lwd=3)
+lines(cd4Data$time,loess(cd4 ~ time,data=cd4Data,span=0.25)$fitted,col="red",lwd=3)
+lines(cd4Data$time,loess(cd4 ~ time,data=cd4Data,span=0.76)$fitted,col="green",lwd=3)
+```
+
+
+---
+
+## Predicting with loess
+
+```{r, dependson="lowess",fig.height=4,fig.width=4}
+tme <- seq(-2,5,length=100); pred1 = predict(lw1,newdata=data.frame(time=tme),se=TRUE)
+plot(tme,pred1$fit,col="blue",lwd=3,type="l",ylim=c(0,2500))
+lines(tme,pred1$fit + 1.96*pred1$se.fit,col="red",lwd=3)
+lines(tme,pred1$fit - 1.96*pred1$se.fit,col="red",lwd=3)
+points(cd4Data$time,cd4Data$cd4,pch=19,cex=0.1)
+```
+
+
+---
+
+## Splines
+
+$$ Y_i = b_0 + \sum_{k=1}^K b_k s_k(x_i) + e_i $$
+
+
+$Y_i$ - outcome for $i$th observation
+
+$b_0$ - Intercept term
+
+$b_k$ - Coefficient for $k$th spline function
+
+$s_k$ - $k$th spline function
+
+$x_i$ - covariate for $i$th observation
+
+$e_i$ - everything we didn't measure/model
+
+
+---
+
+## Splines in R 
+
+```{r splines, dependson="cd4Data",fig.height=4,fig.width=8}
+library(splines)
+ns1 <- ns(cd4Data$time,df=3)
+par(mfrow=c(1,3))
+plot(cd4Data$time,ns1[,1]); plot(cd4Data$time,ns1[,2]); plot(cd4Data$time,ns1[,3])
+```
+
+---
+
+## Regression with splines
+
+```{r splineReg, dependson="splines",fig.height=4,fig.width=4}
+lm1 <- lm(cd4Data$cd4 ~ ns1)
+summary(lm1)
+```
+
+---
+
+## Fitted values
+
+```{r, dependson="splineReg",fig.height=4,fig.width=4}
+plot(cd4Data$time,cd4Data$cd4,pch=19,cex=0.1)
+points(cd4Data$time,lm1$fitted,col="blue",pch=19,cex=0.5)
+```
+
+---
+
+## Notes and further resources
+
+__Notes__:
+
+* Cross-validation with splines/smoothing is a good idea
+* Do not predict outside the range of observed data
+
+__Further resources__:
+
+* [Hector Corrada Bravo's Lecture Notes](http://www.cbcb.umd.edu/~hcorrada/PracticalML/pdf/lectures/smoothing.pdf)
+* [Rafa Irizarry's Lecture Notes on smoothing](http://www.biostat.jhsph.edu/~ririzarr/Teaching/649/section-06.pdf), [On splines](http://www.biostat.jhsph.edu/~ririzarr/Teaching/649/section-09.pdf)
+* [Elements of Statistical Learning](http://www-stat.stanford.edu/~tibs/ElemStatLearn/)
+* [Advanced Data Analysis from An Elementary Point of View](http://www.stat.cmu.edu/~cshalizi/ADAfaEPoV/ADAfaEPoV.pdf)
+
+
+

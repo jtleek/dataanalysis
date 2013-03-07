@@ -1,0 +1,220 @@
+---
+title       : The bootstrap
+subtitle    : 
+author      : Jeffrey Leek, Assistant Professor of Biostatistics 
+job         : Johns Hopkins Bloomberg School of Public Health
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow  # 
+widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+---
+
+
+```{r setup, cache = F, echo = F, message = F, warning = F, tidy = F}
+# make this an external chunk that can be included in any file
+options(width = 100)
+opts_chunk$set(message = F, error = F, warning = F, comment = NA, fig.align = 'center', dpi = 100, tidy = F, cache.path = '.cache/', fig.path = 'fig/')
+
+options(xtable.type = 'html')
+knit_hooks$set(inline = function(x) {
+  if(is.numeric(x)) {
+    round(x, getOption('digits'))
+  } else {
+    paste(as.character(x), collapse = ', ')
+  }
+})
+knit_hooks$set(plot = knitr:::hook_plot_html)
+```
+
+## Key ideas
+
+* Treat the sample as if it were the population
+
+__What it is good for__:
+
+* Calculating standard errors
+* Forming confidence intervals
+* Performing hypothesis tests
+* Improving predictors
+
+---
+
+## The "Central Dogma" of statistics
+
+<img class=center src=assets/img/centraldogma.png height='70%'/>
+
+
+[http://www.gs.washington.edu/academics/courses/akey/56008/lecture/lecture5.pdf](http://www.gs.washington.edu/academics/courses/akey/56008/lecture/lecture5.pdf)
+
+
+---
+
+## The bootstrap
+
+<img class=center src=assets/img/bootstrap.png height='70%'/>
+
+
+---
+
+## Example
+
+```{r,fig.height=4,fig.width=4}
+set.seed(333); x <- rnorm(30)
+bootMean <- rep(NA,1000); sampledMean <- rep(NA,1000)
+for(i in 1:1000){bootMean[i] <- mean(sample(x,replace=TRUE))}
+for(i in 1:1000){sampledMean[i] <- mean(rnorm(30))}
+plot(density(bootMean)); lines(density(sampledMean),col="red")
+```
+
+---
+
+## Example with boot package
+
+```{r bootEx,fig.height=4,fig.width=4}
+set.seed(333); x <- rnorm(30); sampledMean <- rep(NA,1000)
+for(i in 1:1000){sampledMean[i] <- mean(rnorm(30))}
+meanFunc <- function(x,i){mean(x[i])}
+bootMean <- boot(x,meanFunc,1000)
+bootMean
+```
+
+
+---
+
+## Plotting boot package example
+
+```{r, dependson="bootEx",fig.height=4,fig.width=4}
+plot(density(bootMean$t)); lines(density(sampledMean),col="red")
+```
+
+
+
+---
+
+## Nuclear costs
+
+```{r bootNuc,fig.height=4,fig.width=4}
+library(boot); data(nuclear)
+nuke.lm <- lm(log(cost) ~ date,data=nuclear)
+plot(nuclear$date,log(nuclear$cost),pch=19)
+abline(nuke.lm,col="red",lwd=3)
+```
+
+
+---
+
+## Nuclear costs
+
+
+```{r nukeLm, dependson="bootNuc",fig.height=4,fig.width=8}
+par(mfrow=c(1,3))
+for(i in 1:3){
+  nuclear0 <- nuclear[sample(1:dim(nuclear)[1],replace=TRUE),]
+  nuke.lm0 <- lm(log(cost) ~ date,data=nuclear0)
+  plot(nuclear0$date,log(nuclear0$cost),pch=19)
+  abline(nuke.lm0,col="red",lwd=3)
+}
+```
+
+
+---
+
+## Bootstrap distribution
+
+```{r nucRes, dependson="nukeLm",fig.height=4,fig.width=4}
+bs <- function(data, indices,formula) {
+  d <- data[indices,];fit <- lm(formula, data=d);return(coef(fit)) 
+} 
+results <- boot(data=nuclear, statistic=bs, R=1000, formula=log(cost) ~ date)
+plot(density(results$t[,2]),col="red",lwd=3)
+lines(rep(nuke.lm$coeff[2],10),seq(0,8,length=10),col="blue",lwd=3)
+```
+
+[http://www.statmethods.net/advstats/bootstrapping.html](http://www.statmethods.net/advstats/bootstrapping.html)
+
+---
+
+## Bootstrap confidence intervals
+
+```{r dependson="nucRes",fig.height=4,fig.width=4}
+boot.ci(results)
+```
+
+
+---
+
+## Bootstrapping from a model
+
+```{r nullBoot, dependson="nukeLm",fig.height=4,fig.width=4}
+resid <- rstudent(nuke.lm)
+fit0 <- fitted(lm(log(cost) ~ 1,data=nuclear))
+newNuc <- cbind(nuclear,resid=resid,fit0=fit0)
+bs <- function(data, indices) {
+  return(coef(glm(data$fit0 + data$resid[indices] ~ data$date,data=data)))
+} 
+results <- boot(data=newNuc, statistic=bs, R=1000)
+```
+
+---
+
+## Results
+
+```{r, dependson="nullBoot",fig.height=4,fig.width=4}
+plot(density(results$t[,2]),lwd=3,col="blue")
+lines(rep(coef(nuke.lm)[2],10),seq(0,3,length=10),col="red",lwd=3)
+```
+
+---
+
+## An empirical p-value 
+
+$$ \hat{p} = \frac{1 + \sum_{b=1}^B |t_b^0| > |t|}{B+1}$$
+```{r, dependson="nullBoot",fig.height=4,fig.width=4}
+B <- dim(results$t)[1]
+(1 + sum((abs(results$t[,2]) > abs(coef(nuke.lm)[2]))))/(B+1)
+```
+
+
+---
+
+## Bootstrapping non-linear statistics
+
+```{r,fig.height=4,fig.width=4}
+set.seed(555); x <- rnorm(30); sampledMed <- rep(NA,1000)
+for(i in 1:1000){sampledMed[i] <- median(rnorm(30))}
+medFunc <- function(x,i){median(x[i])}; bootMed <- boot(x,medFunc,1000)
+plot(density(bootMed$t),col="red",lwd=3)
+lines(density(sampledMed),lwd=3)
+```
+
+---
+
+## Things you can't bootstrap (max)
+
+```{r,fig.height=4,fig.width=4}
+set.seed(333); x <- rnorm(30); sampledMax <- rep(NA,1000)
+for(i in 1:1000){sampledMax[i] <- max(rnorm(30))}
+maxFunc <- function(x,i){max(x[i])}; bootMax <- boot(x,maxFunc,1000)
+plot(density(bootMax$t),col="red",lwd=3,xlim=c(1,3))
+lines(density(sampledMax),lwd=3)
+```
+
+
+---
+
+## Notes and further resources
+
+__Notes__:
+
+* Can be useful for complicated statistics
+* Be careful near the boundaries
+* Be careful with non-linear functions
+
+__Further resources__:
+
+* [Brian Caffo's bootstrap notes](http://ocw.jhsph.edu/courses/MethodsInBiostatisticsI/PDFs/lecture12.pdf)
+* [Nice basic intro to boot package](http://www.mayin.org/ajayshah/KB/R/documents/boot.html)
+* [Another basic boot tutorial](http://www.statmethods.net/advstats/bootstrapping.html)
+* [An introduction to the bootstrap](http://www.amazon.com/Introduction-Bootstrap-Monographs-Statistics-Probability/dp/0412042312)
+* [Confidence limits on phylogenies](http://www.jstor.org/discover/10.2307/2408678?uid=3739704&uid=2&uid=4&uid=3739256&sid=21101897412687)
