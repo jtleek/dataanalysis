@@ -266,7 +266,7 @@ dataMatrix <- as.matrix(dataFrame)[sample(1:12),]
 kmeansObj2 <- kmeans(dataMatrix,centers=3)
 par(mfrow=c(1,2),mar=rep(0.2,4))
 image(t(dataMatrix)[,nrow(dataMatrix):1],yaxt="n")
-image(t(dataMatrix)[,order(kmeansObj$cluster)],yaxt="n")
+image(t(dataMatrix)[,order(kmeansObj2$cluster)],yaxt="n")
 ```
 
 
