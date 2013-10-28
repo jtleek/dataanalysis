@@ -43,7 +43,7 @@ knit_hooks$set(plot = knitr:::hook_plot_html)
   * Garbage in -> garbage out
 * Distance or similarity
   * Continuous - euclidean distance
-  * Continous - correlation similarity
+  * Continuous - correlation similarity
   * Binary - manhattan distance
 * Pick a distance/similarity that makes sense for your problem
   
@@ -56,7 +56,7 @@ knit_hooks$set(plot = knitr:::hook_plot_html)
   * Fix a number of clusters
   * Get "centroids" of each cluster
   * Assign things to closest centroid
-  * Reclaculate centroids
+  * Recalculate centroids
 * Requires
   * A defined distance metric
   * A number of clusters
