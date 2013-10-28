@@ -52,7 +52,7 @@ knit_hooks$set(plot = knitr:::hook_plot_html)
 
 ## K-means clustering
 
-* A partioning approach
+* A partitioning approach
   * Fix a number of clusters
   * Get "centroids" of each cluster
   * Assign things to closest centroid
