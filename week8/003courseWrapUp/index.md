@@ -159,7 +159,7 @@ mode        : selfcontained # {standalone, draft}
 
 ---
 
-## It has been my exteme pleasure
+## It has been my extreme pleasure
 
 <center> Thank you so much for all of your dedication, time, and enthusiasm. This has been a wonderful experience for me and I hope it has been for you too. </center>
 
